@@ -1,0 +1,49 @@
+{
+  "profession": "law",
+  "category": "follow_up",
+  "sourceLanguage": "english",
+  "targetLanguage": "afrikaans",
+  "title": "Next Court Date",
+  "lines": [
+    {
+      "speaker": "Lawyer",
+      "sourceText": "Your matter will return to court next week",
+      "targetText": "U saak sal volgende week teruggaan hof toe"
+    },
+    {
+      "speaker": "Client",
+      "sourceText": "What date must I come",
+      "targetText": "Op watter datum moet ek kom"
+    },
+    {
+      "speaker": "Lawyer",
+      "sourceText": "Please come on Tuesday at nine o'clock",
+      "targetText": "Kom asseblief Dinsdag om nege-uur"
+    },
+    {
+      "speaker": "Client",
+      "sourceText": "What must I bring",
+      "targetText": "Wat moet ek saambring"
+    },
+    {
+      "speaker": "Lawyer",
+      "sourceText": "Bring your identity document and all your papers",
+      "targetText": "Bring u identiteitsdokument en al u papiere"
+    },
+    {
+      "speaker": "Lawyer",
+      "sourceText": "Please arrive early",
+      "targetText": "Kom asseblief vroeg"
+    },
+    {
+      "speaker": "Client",
+      "sourceText": "I understand",
+      "targetText": "Ek verstaan"
+    },
+    {
+      "speaker": "Lawyer",
+      "sourceText": "Please contact me if you have questions",
+      "targetText": "Kontak my asseblief as u vrae het"
+    }
+  ]
+}
