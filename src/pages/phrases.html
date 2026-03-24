@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FluentProfessionals | Learn Phrases</title>
+  <link rel="stylesheet" href="../styles/main.css" />
+  <style>
+    .page-shell {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 20px 40px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .brand-wrap h1 {
+      margin: 0;
+      font-size: 30px;
+      color: #1a2a44;
+    }
+
+    .brand-wrap p {
+      margin: 4px 0 0;
+      color: #6b7a90;
+    }
+
+    .back-link {
+      display: inline-block;
+      text-decoration: none;
+      color: #1a2a44;
+      background: white;
+      border-radius: 12px;
+      padding: 10px 14px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      font-weight: 600;
+    }
+
+    .controls-card,
+    .status-card,
+    .phrases-card {
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 18px;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .control-group label {
+      font-weight: 700;
+      color: #1a2a44;
+      font-size: 14px;
+    }
+
+    .control-group select {
+      padding: 11px 12px;
+      border: 1px solid #d3d9e3;
+      border-radius: 10px;
+      font-size: 15px;
+      background: #fff;
+    }
+
+    .section-title {
+      margin: 0 0 6px;
+      color: #1a2a44;
+      font-size: 22px;
+    }
+
+    .section-subtitle {
+      margin: 0;
+      color: #6b7a90;
+    }
+
+    .status-text {
+      margin: 0;
+      color: #31415d;
+      font-size: 15px;
+    }
+
+    .phrase-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .phrase-card {
+      border: 1px solid #e5eaf2;
+      border-radius: 14px;
+      padding: 16px;
+      background: #fbfcff;
+    }
+
+    .phrase-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .category-badge {
+      background: #e9f0ff;
+      color: #264a8a;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+
+    .difficulty-badge {
+      background: #eef7ee;
+      color: #2f6d37;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+
+    .phrase-label {
+      font-size: 12px;
+      color: #6b7a90;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    .phrase-text {
+      margin: 0 0 12px;
+      color: #1a2a44;
+      font-size: 20px;
+      line-height: 1.45;
+    }
+
+    .phrase-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .phrase-actions button {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #1a2a44;
+      color: white;
+    }
+
+    .phrase-actions button.secondary {
+      background: #edf2fb;
+      color: #1a2a44;
+    }
+
+    .empty-state {
+      padding: 24px;
+      text-align: center;
+      color: #6b7a90;
+      border: 1px dashed #c8d2e2;
+      border-radius: 14px;
+      background: #fbfcff;
+    }
+
+    @media (max-width: 760px) {
+      .controls-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .phrase-text {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <div class="topbar">
+      <a class="back-link" href="../../index.html">← Back Home</a>
+
+      <div class="brand-wrap">
+        <h1>Learn Phrases</h1>
+        <p>FluentProfessionals · Language for professionals</p>
+      </div>
+    </div>
+
+    <section class="controls-card">
+      <h2 class="section-title">Choose your lesson</h2>
+      <p class="section-subtitle">Start with law phrases and switch languages as you grow the app.</p>
+
+      <div class="controls-grid" style="margin-top: 18px;">
+        <div class="control-group">
+          <label for="professionSelect">Profession</label>
+          <select id="professionSelect">
+            <option value="law">Law</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="sourceLangSelect">Home language</label>
+          <select id="sourceLangSelect">
+            <option value="english">English</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="targetLangSelect">Target language</label>
+          <select id="targetLangSelect">
+            <option value="afrikaans">Afrikaans</option>
+            <option value="isizulu">isiZulu</option>
+            <option value="setswana">Setswana</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="status-card">
+      <p class="status-text" id="statusText">Loading phrases…</p>
+    </section>
+
+    <section class="phrases-card">
+      <h2 class="section-title">Phrase list</h2>
+      <p class="section-subtitle">Tap a button to hear the English or target-language version.</p>
+
+      <div id="phraseList" class="phrase-list"></div>
+    </section>
+  </div>
+
+  <script type="module">
+    const professionSelect = document.getElementById("professionSelect");
+    const sourceLangSelect = document.getElementById("sourceLangSelect");
+    const targetLangSelect = document.getElementById("targetLangSelect");
+    const phraseList = document.getElementById("phraseList");
+    const statusText = document.getElementById("statusText");
+
+    function stopSpeaking() {
+      window.speechSynthesis.cancel();
+    }
+
+    function chooseVoice(text, langCode) {
+      const voices = window.speechSynthesis.getVoices();
+      if (!voices.length) return null;
+
+      const exact = voices.find(v => v.lang && v.lang.toLowerCase() === langCode.toLowerCase());
+      if (exact) return exact;
+
+      const samePrefix = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(langCode.split("-")[0].toLowerCase()));
+      if (samePrefix) return samePrefix;
+
+      return null;
+    }
+
+    function getSpeechLanguage(language) {
+      const map = {
+        english: "en-ZA",
+        afrikaans: "af-ZA",
+        isizulu: "zu-ZA",
+        setswana: "tn-ZA"
+      };
+      return map[language] || "en-ZA";
+    }
+
+    function speak(text, languageKey) {
+      if (!text) return;
+
+      stopSpeaking();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = getSpeechLanguage(languageKey);
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+
+      const voice = chooseVoice(text, utterance.lang);
+      if (voice) utterance.voice = voice;
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function getDataPath() {
+      const profession = professionSelect.value;
+      const sourceLang = sourceLangSelect.value;
+      const targetLang = targetLangSelect.value;
+      return `../data/${profession}/${sourceLang}-${targetLang}.json`;
+    }
+
+    function createBadge(text, className) {
+      const span = document.createElement("span");
+      span.className = className;
+      span.textContent = text;
+      return span;
+    }
+
+    function renderEmpty(message) {
+      phraseList.innerHTML = "";
+      const empty = document.createElement("div");
+      empty.className = "empty-state";
+      empty.textContent = message;
+      phraseList.appendChild(empty);
+    }
+
+    function renderPhrases(data) {
+      phraseList.innerHTML = "";
+
+      if (!data.items || !data.items.length) {
+        renderEmpty("No phrases found in this lesson yet.");
+        return;
+      }
+
+      data.items.forEach((item) => {
+        const card = document.createElement("article");
+        card.className = "phrase-card";
+
+        const top = document.createElement("div");
+        top.className = "phrase-top";
+
+        const leftWrap = document.createElement("div");
+        leftWrap.appendChild(createBadge(data.category || "general", "category-badge"));
+
+        const rightWrap = document.createElement("div");
+        if (item.difficulty) {
+          rightWrap.appendChild(createBadge(item.difficulty, "difficulty-badge"));
+        }
+
+        top.appendChild(leftWrap);
+        top.appendChild(rightWrap);
+
+        const sourceLabel = document.createElement("div");
+        sourceLabel.className = "phrase-label";
+        sourceLabel.textContent = data.sourceLanguage || "Source";
+
+        const sourceText = document.createElement("p");
+        sourceText.className = "phrase-text";
+        sourceText.textContent = item.sourceText || "";
+
+        const targetLabel = document.createElement("div");
+        targetLabel.className = "phrase-label";
+        targetLabel.textContent = data.targetLanguage || "Target";
+
+        const targetText = document.createElement("p");
+        targetText.className = "phrase-text";
+        targetText.textContent = item.targetText || "";
+
+        const actions = document.createElement("div");
+        actions.className = "phrase-actions";
+
+        const sourceBtn = document.createElement("button");
+        sourceBtn.textContent = `🔊 Hear ${capitalize(data.sourceLanguage)}`;
+        sourceBtn.addEventListener("click", () => speak(item.sourceText, data.sourceLanguage));
+
+        const targetBtn = document.createElement("button");
+        targetBtn.className = "secondary";
+        targetBtn.textContent = `🔊 Hear ${capitalize(data.targetLanguage)}`;
+        targetBtn.addEventListener("click", () => speak(item.targetText, data.targetLanguage));
+
+        actions.appendChild(sourceBtn);
+        actions.appendChild(targetBtn);
+
+        card.appendChild(top);
+        card.appendChild(sourceLabel);
+        card.appendChild(sourceText);
+        card.appendChild(targetLabel);
+        card.appendChild(targetText);
+        card.appendChild(actions);
+
+        phraseList.appendChild(card);
+      });
+    }
+
+    function capitalize(value) {
+      if (!value) return "";
+      if (value === "isizulu") return "isiZulu";
+      if (value === "setswana") return "Setswana";
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    }
+
+    async function loadPhrases() {
+      const path = getDataPath();
+      statusText.textContent = `Loading ${professionSelect.value} phrases: ${sourceLangSelect.value} → ${targetLangSelect.value}...`;
+
+      try {
+        const response = await fetch(path);
+
+        if (!response.ok) {
+          throw new Error(`Could not load ${path}`);
+        }
+
+        const data = await response.json();
+        renderPhrases(data);
+
+        const count = Array.isArray(data.items) ? data.items.length : 0;
+        statusText.textContent = `Showing ${count} ${data.category || ""} phrase${count === 1 ? "" : "s"} for ${capitalize(data.sourceLanguage)} → ${capitalize(data.targetLanguage)}.`;
+      } catch (error) {
+        console.error(error);
+        renderEmpty("This lesson file is not available yet. Add the JSON file, then reload the page.");
+        statusText.textContent = `Could not load ${path}`;
+      }
+    }
+
+    professionSelect.addEventListener("change", loadPhrases);
+    sourceLangSelect.addEventListener("change", loadPhrases);
+    targetLangSelect.addEventListener("change", loadPhrases);
+
+    window.speechSynthesis.onvoiceschanged = () => {
+      // Makes voices available on some browsers before the user taps a phrase.
+    };
+
+    loadPhrases();
+  </script>
+</body>
+</html>
