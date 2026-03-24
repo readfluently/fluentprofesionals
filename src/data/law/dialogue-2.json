@@ -1,0 +1,49 @@
+{
+  "profession": "law",
+  "category": "documents",
+  "sourceLanguage": "english",
+  "targetLanguage": "afrikaans",
+  "title": "Signing an Affidavit",
+  "lines": [
+    {
+      "speaker": "Lawyer",
+      "sourceText": "This document is an affidavit",
+      "targetText": "Hierdie dokument is 'n beëdigde verklaring"
+    },
+    {
+      "speaker": "Client",
+      "sourceText": "What does it say",
+      "targetText": "Wat sê dit"
+    },
+    {
+      "speaker": "Lawyer",
+      "sourceText": "It sets out your statement",
+      "targetText": "Dit sit u verklaring uiteen"
+    },
+    {
+      "speaker": "Lawyer",
+      "sourceText": "Please read it carefully",
+      "targetText": "Lees dit asseblief sorgvuldig"
+    },
+    {
+      "speaker": "Client",
+      "sourceText": "I do not understand this part",
+      "targetText": "Ek verstaan nie hierdie deel nie"
+    },
+    {
+      "speaker": "Lawyer",
+      "sourceText": "I will explain this part clearly",
+      "targetText": "Ek sal hierdie deel duidelik verduidelik"
+    },
+    {
+      "speaker": "Lawyer",
+      "sourceText": "Do not sign if you do not understand",
+      "targetText": "Moenie teken as u nie verstaan nie"
+    },
+    {
+      "speaker": "Lawyer",
+      "sourceText": "Please sign here when you are ready",
+      "targetText": "Teken asseblief hier wanneer u gereed is"
+    }
+  ]
+}
