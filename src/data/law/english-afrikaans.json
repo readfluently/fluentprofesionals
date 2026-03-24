@@ -1,0 +1,64 @@
+{
+  "profession": "law",
+  "category": "consultation",
+  "sourceLanguage": "english",
+  "targetLanguage": "afrikaans",
+  "items": [
+    {
+      "id": "law_001",
+      "sourceText": "Please tell me what happened",
+      "targetText": "Vertel my asseblief wat gebeur het",
+      "tone": "professional",
+      "difficulty": "easy"
+    },
+    {
+      "id": "law_002",
+      "sourceText": "Start from the beginning",
+      "targetText": "Begin van die begin af",
+      "tone": "professional",
+      "difficulty": "easy"
+    },
+    {
+      "id": "law_003",
+      "sourceText": "Speak slowly",
+      "targetText": "Praat stadig",
+      "tone": "professional",
+      "difficulty": "easy"
+    },
+    {
+      "id": "law_004",
+      "sourceText": "I understand",
+      "targetText": "Ek verstaan",
+      "tone": "professional",
+      "difficulty": "easy"
+    },
+    {
+      "id": "law_005",
+      "sourceText": "I need more information",
+      "targetText": "Ek het meer inligting nodig",
+      "tone": "professional",
+      "difficulty": "easy"
+    },
+    {
+      "id": "law_006",
+      "sourceText": "Please explain that again",
+      "targetText": "Verduidelik dit asseblief weer",
+      "tone": "professional",
+      "difficulty": "medium"
+    },
+    {
+      "id": "law_007",
+      "sourceText": "Do you have the document with you",
+      "targetText": "Het u die dokument by u",
+      "tone": "professional",
+      "difficulty": "medium"
+    },
+    {
+      "id": "law_008",
+      "sourceText": "Please sign here",
+      "targetText": "Teken asseblief hier",
+      "tone": "professional",
+      "difficulty": "easy"
+    }
+  ]
+}
