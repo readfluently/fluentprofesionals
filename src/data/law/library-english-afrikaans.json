@@ -1,0 +1,31 @@
+{
+  "profession": "law",
+  "sourceLanguage": "english",
+  "targetLanguage": "afrikaans",
+  "items": [
+    {
+      "id": "law_dialogue_001",
+      "title": "First Client Consultation",
+      "category": "consultation",
+      "description": "A simple first meeting between a lawyer and a client.",
+      "file": "dialogue-1.json",
+      "lineCount": 8
+    },
+    {
+      "id": "law_dialogue_002",
+      "title": "Signing an Affidavit",
+      "category": "documents",
+      "description": "Explaining a document before the client signs.",
+      "file": "dialogue-2.json",
+      "lineCount": 8
+    },
+    {
+      "id": "law_dialogue_003",
+      "title": "Next Court Date",
+      "category": "follow_up",
+      "description": "Giving the client the next date and what to bring.",
+      "file": "dialogue-3.json",
+      "lineCount": 8
+    }
+  ]
+}
