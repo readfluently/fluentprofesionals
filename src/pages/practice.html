@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FluentProfessionals | Speak & Practice</title>
+  <link rel="stylesheet" href="../styles/main.css" />
+  <style>
+    .page-shell {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 20px 40px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .back-link {
+      display: inline-block;
+      text-decoration: none;
+      color: #1a2a44;
+      background: white;
+      border-radius: 12px;
+      padding: 10px 14px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      font-weight: 700;
+    }
+
+    .brand-wrap h1 {
+      margin: 0;
+      font-size: 30px;
+      color: #1a2a44;
+    }
+
+    .brand-wrap p {
+      margin: 4px 0 0;
+      color: #6b7a90;
+    }
+
+    .panel {
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      margin: 0 0 6px;
+      color: #1a2a44;
+      font-size: 22px;
+    }
+
+    .section-subtitle {
+      margin: 0;
+      color: #6b7a90;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .control-group label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1a2a44;
+    }
+
+    .control-group select {
+      padding: 11px 12px;
+      border: 1px solid #d3d9e3;
+      border-radius: 10px;
+      font-size: 15px;
+      background: #fff;
+    }
+
+    .status-text {
+      margin: 0;
+      color: #31415d;
+      font-size: 15px;
+    }
+
+    .practice-card {
+      border: 1px solid #e5eaf2;
+      border-radius: 16px;
+      padding: 18px;
+      background: #fbfcff;
+    }
+
+    .practice-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e9f0ff;
+      color: #264a8a;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+
+    .line-label {
+      font-size: 12px;
+      color: #6b7a90;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .line-text {
+      margin: 0 0 12px;
+      font-size: 22px;
+      line-height: 1.5;
+      color: #1a2a44;
+    }
+
+    .toolbar,
+    .recording-toolbar,
+    .nav-toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #1a2a44;
+      color: white;
+    }
+
+    button.secondary {
+      background: #edf2fb;
+      color: #1a2a44;
+    }
+
+    button.warn {
+      background: #a83232;
+      color: white;
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .small-note {
+      margin-top: 12px;
+      color: #6b7a90;
+      font-size: 14px;
+    }
+
+    .progress-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .progress-text {
+      margin: 0;
+      color: #31415d;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .meter {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: #edf2fb;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .meter-fill {
+      height: 100%;
+      width: 0%;
+      background: #264a8a;
+      transition: width 0.25s ease;
+    }
+
+    .recording-box {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 14px;
+      background: #f3f7ff;
+      border: 1px solid #d9e4f7;
+    }
+
+    .recording-state {
+      margin: 0;
+      color: #1a2a44;
+      font-weight: 700;
+    }
+
+    .empty-state {
+      padding: 24px;
+      text-align: center;
+      color: #6b7a90;
+      border: 1px dashed #c8d2e2;
+      border-radius: 14px;
+      background: #fbfcff;
+    }
+
+    @media (max-width: 900px) {
+      .controls-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .line-text {
+        font-size: 19px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <div class="topbar">
+      <a class="back-link" href="../../index.html">← Back Home</a>
+
+      <div class="brand-wrap">
+        <h1>Speak & Practice</h1>
+        <p>FluentProfessionals · Language for professionals</p>
+      </div>
+    </div>
+
+    <section class="panel">
+      <h2 class="section-title">Choose your practice set</h2>
+      <p class="section-subtitle">Practise one phrase at a time. Listen, repeat, record, and play back your voice.</p>
+
+      <div class="controls-grid">
+        <div class="control-group">
+          <label for="professionSelect">Profession</label>
+          <select id="professionSelect">
+            <option value="law">Law</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="sourceLangSelect">Home language</label>
+          <select id="sourceLangSelect">
+            <option value="english">English</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="targetLangSelect">Target language</label>
+          <select id="targetLangSelect">
+            <option value="afrikaans">Afrikaans</option>
+            <option value="isizulu">isiZulu</option>
+            <option value="setswana">Setswana</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="categorySelect">Category</label>
+          <select id="categorySelect">
+            <option value="all">All categories</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <p id="statusText" class="status-text">Loading practice phrases…</p>
+    </section>
+
+    <section class="panel">
+      <div id="practiceContainer"></div>
+    </section>
+  </div>
+
+  <script type="module">
+    const professionSelect = document.getElementById("professionSelect");
+    const sourceLangSelect = document.getElementById("sourceLangSelect");
+    const targetLangSelect = document.getElementById("targetLangSelect");
+    const categorySelect = document.getElementById("categorySelect");
+    const statusText = document.getElementById("statusText");
+    const practiceContainer = document.getElementById("practiceContainer");
+
+    let allItems = [];
+    let practiceItems = [];
+    let currentIndex = 0;
+
+    let mediaRecorder = null;
+    let recordedChunks = [];
+    let recordedAudioUrl = null;
+    let lastAudio = null;
+    let streamRef = null;
+
+    function stopSpeaking() {
+      window.speechSynthesis.cancel();
+    }
+
+    function getSpeechLanguage(language) {
+      const map = {
+        english: "en-ZA",
+        afrikaans: "af-ZA",
+        isizulu: "zu-ZA",
+        setswana: "tn-ZA"
+      };
+      return map[language] || "en-ZA";
+    }
+
+    function chooseVoice(langCode) {
+      const voices = window.speechSynthesis.getVoices();
+      if (!voices.length) return null;
+
+      const exact = voices.find(v => v.lang && v.lang.toLowerCase() === langCode.toLowerCase());
+      if (exact) return exact;
+
+      const prefix = langCode.split("-")[0].toLowerCase();
+      return voices.find(v => v.lang && v.lang.toLowerCase().startsWith(prefix)) || null;
+    }
+
+    function speak(text, languageKey) {
+      if (!text) return;
+
+      stopSpeaking();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = getSpeechLanguage(languageKey);
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+
+      const voice = chooseVoice(utterance.lang);
+      if (voice) utterance.voice = voice;
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function capitalize(value) {
+      if (!value) return "";
+      if (value === "isizulu") return "isiZulu";
+      if (value === "setswana") return "Setswana";
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    }
+
+    function humanizeCategory(value) {
+      if (!value) return "General";
+      return value.replaceAll("_", " ").replace(/\b\w/g, char => char.toUpperCase());
+    }
+
+    function getDataPath() {
+      const profession = professionSelect.value;
+      const sourceLang = sourceLangSelect.value;
+      const targetLang = targetLangSelect.value;
+      return `../data/${profession}/${sourceLang}-${targetLang}.json`;
+    }
+
+    function updateCategoryOptions(items) {
+      const categories = [...new Set(items.map(item => item.category).filter(Boolean))];
+      const currentValue = categorySelect.value;
+
+      categorySelect.innerHTML = `<option value="all">All categories</option>`;
+
+      categories.forEach(category => {
+        const option = document.createElement("option");
+        option.value = category;
+        option.textContent = humanizeCategory(category);
+        categorySelect.appendChild(option);
+      });
+
+      if (categories.includes(currentValue)) {
+        categorySelect.value = currentValue;
+      } else {
+        categorySelect.value = "all";
+      }
+    }
+
+    function applyCategoryFilter() {
+      const selected = categorySelect.value;
+      practiceItems = selected === "all"
+        ? [...allItems]
+        : allItems.filter(item => item.category === selected);
+
+      currentIndex = 0;
+      clearRecording();
+      renderPracticeCard();
+      updateStatus();
+    }
+
+    function updateStatus() {
+      if (!practiceItems.length) {
+        statusText.textContent = "No practice phrases are available for this filter yet.";
+        return;
+      }
+
+      statusText.textContent = `Practising ${practiceItems.length} phrase${practiceItems.length === 1 ? "" : "s"} · ${currentIndex + 1} of ${practiceItems.length} · ${capitalize(sourceLangSelect.value)} → ${capitalize(targetLangSelect.value)}.`;
+    }
+
+    function clearRecording() {
+      if (lastAudio) {
+        lastAudio.pause();
+        lastAudio = null;
+      }
+
+      if (recordedAudioUrl) {
+        URL.revokeObjectURL(recordedAudioUrl);
+        recordedAudioUrl = null;
+      }
+
+      recordedChunks = [];
+      mediaRecorder = null;
+    }
+
+    function cleanupStream() {
+      if (streamRef) {
+        streamRef.getTracks().forEach(track => track.stop());
+        streamRef = null;
+      }
+    }
+
+    function renderEmpty(message) {
+      practiceContainer.innerHTML = "";
+      const empty = document.createElement("div");
+      empty.className = "empty-state";
+      empty.textContent = message;
+      practiceContainer.appendChild(empty);
+    }
+
+    function renderPracticeCard() {
+      practiceContainer.innerHTML = "";
+
+      if (!practiceItems.length) {
+        renderEmpty("No phrases found in this practice set yet.");
+        return;
+      }
+
+      const item = practiceItems[currentIndex];
+
+      const card = document.createElement("div");
+      card.className = "practice-card";
+
+      const top = document.createElement("div");
+      top.className = "practice-top";
+
+      const titleWrap = document.createElement("div");
+      const title = document.createElement("h2");
+      title.className = "section-title";
+      title.textContent = "Practice line";
+
+      const subtitle = document.createElement("p");
+      subtitle.className = "section-subtitle";
+      subtitle.textContent = "Listen first, then repeat it in the target language.";
+
+      titleWrap.appendChild(title);
+      titleWrap.appendChild(subtitle);
+
+      const badge = document.createElement("span");
+      badge.className = "badge";
+      badge.textContent = humanizeCategory(item.category || "general");
+
+      top.appendChild(titleWrap);
+      top.appendChild(badge);
+
+      const sourceLabel = document.createElement("div");
+      sourceLabel.className = "line-label";
+      sourceLabel.textContent = capitalize(sourceLangSelect.value);
+
+      const sourceText = document.createElement("p");
+      sourceText.className = "line-text";
+      sourceText.textContent = item.sourceText || "";
+
+      const targetLabel = document.createElement("div");
+      targetLabel.className = "line-label";
+      targetLabel.textContent = capitalize(targetLangSelect.value);
+
+      const targetText = document.createElement("p");
+      targetText.className = "line-text";
+      targetText.textContent = item.targetText || "";
+
+      const toolbar = document.createElement("div");
+      toolbar.className = "toolbar";
+
+      const hearSourceBtn = document.createElement("button");
+      hearSourceBtn.textContent = `🔊 Hear ${capitalize(sourceLangSelect.value)}`;
+      hearSourceBtn.addEventListener("click", () => speak(item.sourceText, sourceLangSelect.value));
+
+      const hearTargetBtn = document.createElement("button");
+      hearTargetBtn.className = "secondary";
+      hearTargetBtn.textContent = `🔊 Hear ${capitalize(targetLangSelect.value)}`;
+      hearTargetBtn.addEventListener("click", () => speak(item.targetText, targetLangSelect.value));
+
+      toolbar.appendChild(hearSourceBtn);
+      toolbar.appendChild(hearTargetBtn);
+
+      const recordingBox = document.createElement("div");
+      recordingBox.className = "recording-box";
+
+      const recordingState = document.createElement("p");
+      recordingState.className = "recording-state";
+      recordingState.id = "recordingState";
+      recordingState.textContent = "Ready to record your voice.";
+
+      const recordingToolbar = document.createElement("div");
+      recordingToolbar.className = "recording-toolbar";
+
+      const startRecordBtn = document.createElement("button");
+      startRecordBtn.textContent = "⏺ Start recording";
+
+      const stopRecordBtn = document.createElement("button");
+      stopRecordBtn.className = "warn";
+      stopRecordBtn.textContent = "⏹ Stop recording";
+      stopRecordBtn.disabled = true;
+
+      const playMyVoiceBtn = document.createElement("button");
+      playMyVoiceBtn.className = "secondary";
+      playMyVoiceBtn.textContent = "▶ Play my voice";
+      playMyVoiceBtn.disabled = true;
+
+      recordingToolbar.appendChild(startRecordBtn);
+      recordingToolbar.appendChild(stopRecordBtn);
+      recordingToolbar.appendChild(playMyVoiceBtn);
+
+      const smallNote = document.createElement("p");
+      smallNote.className = "small-note";
+      smallNote.textContent = "Your browser may ask for microphone permission the first time.";
+
+      recordingBox.appendChild(recordingState);
+      recordingBox.appendChild(recordingToolbar);
+      recordingBox.appendChild(smallNote);
+
+      const navToolbar = document.createElement("div");
+      navToolbar.className = "nav-toolbar";
+
+      const prevBtn = document.createElement("button");
+      prevBtn.className = "secondary";
+      prevBtn.textContent = "← Previous";
+      prevBtn.disabled = currentIndex === 0;
+      prevBtn.addEventListener("click", () => {
+        stopSpeaking();
+        clearRecording();
+        cleanupStream();
+        currentIndex -= 1;
+        renderPracticeCard();
+        updateStatus();
+      });
+
+      const nextBtn = document.createElement("button");
+      nextBtn.textContent = "Next →";
+      nextBtn.disabled = currentIndex === practiceItems.length - 1;
+      nextBtn.addEventListener("click", () => {
+        stopSpeaking();
+        clearRecording();
+        cleanupStream();
+        currentIndex += 1;
+        renderPracticeCard();
+        updateStatus();
+      });
+
+      navToolbar.appendChild(prevBtn);
+      navToolbar.appendChild(nextBtn);
+
+      const progressRow = document.createElement("div");
+      progressRow.className = "progress-row";
+
+      const progressText = document.createElement("p");
+      progressText.className = "progress-text";
+      progressText.textContent = `Phrase ${currentIndex + 1} of ${practiceItems.length}`;
+
+      const progressWrap = document.createElement("div");
+      progressWrap.style.width = "100%";
+
+      const meter = document.createElement("div");
+      meter.className = "meter";
+
+      const meterFill = document.createElement("div");
+      meterFill.className = "meter-fill";
+      meterFill.style.width = `${((currentIndex + 1) / practiceItems.length) * 100}%`;
+
+      meter.appendChild(meterFill);
+      progressWrap.appendChild(meter);
+
+      progressRow.appendChild(progressText);
+      progressRow.appendChild(progressWrap);
+
+      startRecordBtn.addEventListener("click", async () => {
+        clearRecording();
+        cleanupStream();
+
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          recordingState.textContent = "This browser does not support microphone recording.";
+          return;
+        }
+
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          streamRef = stream;
+
+          mediaRecorder = new MediaRecorder(stream);
+          recordedChunks = [];
+
+          mediaRecorder.ondataavailable = event => {
+            if (event.data && event.data.size > 0) {
+              recordedChunks.push(event.data);
+            }
+          };
+
+          mediaRecorder.onstop = () => {
+            const blob = new Blob(recordedChunks, { type: "audio/webm" });
+            recordedAudioUrl = URL.createObjectURL(blob);
+            playMyVoiceBtn.disabled = false;
+            recordingState.textContent = "Recording saved. Play your voice to compare.";
+            cleanupStream();
+          };
+
+          mediaRecorder.start();
+          recordingState.textContent = "Recording… say the target phrase now.";
+          startRecordBtn.disabled = true;
+          stopRecordBtn.disabled = false;
+          playMyVoiceBtn.disabled = true;
+        } catch (error) {
+          console.error(error);
+          recordingState.textContent = "Microphone access was not allowed.";
+        }
+      });
+
+      stopRecordBtn.addEventListener("click", () => {
+        if (mediaRecorder && mediaRecorder.state !== "inactive") {
+          mediaRecorder.stop();
+        }
+        startRecordBtn.disabled = false;
+        stopRecordBtn.disabled = true;
+      });
+
+      playMyVoiceBtn.addEventListener("click", () => {
+        if (!recordedAudioUrl) return;
+        if (lastAudio) lastAudio.pause();
+
+        lastAudio = new Audio(recordedAudioUrl);
+        lastAudio.play();
+      });
+
+      card.appendChild(top);
+      card.appendChild(sourceLabel);
+      card.appendChild(sourceText);
+      card.appendChild(targetLabel);
+      card.appendChild(targetText);
+      card.appendChild(toolbar);
+      card.appendChild(recordingBox);
+      card.appendChild(navToolbar);
+      card.appendChild(progressRow);
+
+      practiceContainer.appendChild(card);
+    }
+
+    async function loadPracticeItems() {
+      const path = getDataPath();
+      statusText.textContent = `Loading practice phrases: ${sourceLangSelect.value} → ${targetLangSelect.value}...`;
+
+      try {
+        const response = await fetch(path);
+
+        if (!response.ok) {
+          throw new Error(`Could not load ${path}`);
+        }
+
+        const data = await response.json();
+        allItems = (data.items || []).map(item => ({
+          ...item,
+          category: item.category || data.category || "general"
+        }));
+
+        updateCategoryOptions(allItems);
+        applyCategoryFilter();
+      } catch (error) {
+        console.error(error);
+        allItems = [];
+        practiceItems = [];
+        updateCategoryOptions([]);
+        renderEmpty("This practice file is not available yet. Add the JSON file, then reload the page.");
+        statusText.textContent = `Could not load ${path}`;
+      }
+    }
+
+    categorySelect.addEventListener("change", () => {
+      stopSpeaking();
+      clearRecording();
+      cleanupStream();
+      applyCategoryFilter();
+    });
+
+    professionSelect.addEventListener("change", () => {
+      stopSpeaking();
+      clearRecording();
+      cleanupStream();
+      loadPracticeItems();
+    });
+
+    sourceLangSelect.addEventListener("change", () => {
+      stopSpeaking();
+      clearRecording();
+      cleanupStream();
+      loadPracticeItems();
+    });
+
+    targetLangSelect.addEventListener("change", () => {
+      stopSpeaking();
+      clearRecording();
+      cleanupStream();
+      loadPracticeItems();
+    });
+
+    window.addEventListener("beforeunload", () => {
+      stopSpeaking();
+      clearRecording();
+      cleanupStream();
+    });
+
+    window.speechSynthesis.onvoiceschanged = () => {};
+
+    loadPracticeItems();
+  </script>
+</body>
+</html>
