@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FluentProfessionals | Library</title>
+  <link rel="stylesheet" href="../styles/main.css"/>
+
+  <style>
+    .page {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .back {
+      text-decoration: none;
+      background: white;
+      padding: 8px 12px;
+      border-radius: 10px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+      color: #1a2a44;
+      font-weight: bold;
+    }
+
+    .dialogue-card {
+      background: white;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .line {
+      margin-bottom: 15px;
+    }
+
+    .speaker {
+      font-weight: bold;
+      color: #1a2a44;
+      font-size: 14px;
+    }
+
+    .text {
+      font-size: 18px;
+      margin: 4px 0;
+    }
+
+    .target {
+      color: #2a4d9b;
+    }
+
+    button {
+      margin-top: 5px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: none;
+      background: #1a2a44;
+      color: white;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .play-all {
+      margin-bottom: 15px;
+      background: #2a4d9b;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <div class="topbar">
+    <a href="../../index.html" class="back">← Back</a>
+    <h2>Library</h2>
+  </div>
+
+  <div id="dialogueContainer"></div>
+
+</div>
+
+<script>
+function speak(text, lang="en-ZA") {
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang;
+  utterance.rate = 0.9;
+  speechSynthesis.speak(utterance);
+}
+
+function getLangCode(lang) {
+  return {
+    english: "en-ZA",
+    afrikaans: "af-ZA",
+    isizulu: "zu-ZA",
+    setswana: "tn-ZA"
+  }[lang] || "en-ZA";
+}
+
+async function loadDialogue() {
+  const response = await fetch("../data/law/dialogue-1.json");
+  const data = await response.json();
+
+  const container = document.getElementById("dialogueContainer");
+
+  const card = document.createElement("div");
+  card.className = "dialogue-card";
+
+  const title = document.createElement("h3");
+  title.textContent = data.title;
+  card.appendChild(title);
+
+  const playAll = document.createElement("button");
+  playAll.textContent = "▶ Play Conversation";
+  playAll.className = "play-all";
+
+  playAll.onclick = async () => {
+    for (let line of data.lines) {
+      speak(line.targetText, getLangCode(data.targetLanguage));
+      await new Promise(r => setTimeout(r, 2000));
+    }
+  };
+
+  card.appendChild(playAll);
+
+  data.lines.forEach(line => {
+    const lineDiv = document.createElement("div");
+    lineDiv.className = "line";
+
+    const speaker = document.createElement("div");
+    speaker.className = "speaker";
+    speaker.textContent = line.speaker;
+
+    const source = document.createElement("div");
+    source.className = "text";
+    source.textContent = line.sourceText;
+
+    const target = document.createElement("div");
+    target.className = "text target";
+    target.textContent = line.targetText;
+
+    const btn = document.createElement("button");
+    btn.textContent = "🔊 Play";
+    btn.onclick = () => speak(line.targetText, getLangCode(data.targetLanguage));
+
+    lineDiv.appendChild(speaker);
+    lineDiv.appendChild(source);
+    lineDiv.appendChild(target);
+    lineDiv.appendChild(btn);
+
+    card.appendChild(lineDiv);
+  });
+
+  container.appendChild(card);
+}
+
+loadDialogue();
+</script>
+
+</body>
+</html>
