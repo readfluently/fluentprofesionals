@@ -1,0 +1,49 @@
+{
+  "profession": "law",
+  "category": "consultation",
+  "sourceLanguage": "english",
+  "targetLanguage": "afrikaans",
+  "title": "First Client Consultation",
+  "lines": [
+    {
+      "speaker": "Lawyer",
+      "sourceText": "Good morning",
+      "targetText": "Goeie môre"
+    },
+    {
+      "speaker": "Client",
+      "sourceText": "Good morning",
+      "targetText": "Goeie môre"
+    },
+    {
+      "speaker": "Lawyer",
+      "sourceText": "Please tell me what happened",
+      "targetText": "Vertel my asseblief wat gebeur het"
+    },
+    {
+      "speaker": "Client",
+      "sourceText": "I need help with a document",
+      "targetText": "Ek het hulp nodig met 'n dokument"
+    },
+    {
+      "speaker": "Lawyer",
+      "sourceText": "Please read this document carefully",
+      "targetText": "Lees asseblief hierdie dokument sorgvuldig"
+    },
+    {
+      "speaker": "Client",
+      "sourceText": "I do not understand",
+      "targetText": "Ek verstaan nie"
+    },
+    {
+      "speaker": "Lawyer",
+      "sourceText": "I will explain it",
+      "targetText": "Ek sal dit verduidelik"
+    },
+    {
+      "speaker": "Lawyer",
+      "sourceText": "Please sign here",
+      "targetText": "Teken asseblief hier"
+    }
+  ]
+}
