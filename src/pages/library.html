@@ -7,163 +7,711 @@
   <link rel="stylesheet" href="../styles/main.css"/>
 
   <style>
-    .page {
-      max-width: 900px;
-      margin: auto;
-      padding: 20px;
+    .page-shell {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 24px 20px 40px;
     }
 
     .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      gap: 14px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
     }
 
-    .back {
+    .back-link {
+      display: inline-block;
       text-decoration: none;
-      background: white;
-      padding: 8px 12px;
-      border-radius: 10px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.05);
       color: #1a2a44;
-      font-weight: bold;
-    }
-
-    .dialogue-card {
       background: white;
-      border-radius: 14px;
-      padding: 20px;
-      margin-bottom: 20px;
+      border-radius: 12px;
+      padding: 10px 14px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      font-weight: 700;
     }
 
-    .line {
-      margin-bottom: 15px;
+    .brand-wrap h1 {
+      margin: 0;
+      font-size: 30px;
+      color: #1a2a44;
+    }
+
+    .brand-wrap p {
+      margin: 4px 0 0;
+      color: #6b7a90;
+    }
+
+    .panel {
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      margin: 0 0 6px;
+      color: #1a2a44;
+      font-size: 22px;
+    }
+
+    .section-subtitle {
+      margin: 0;
+      color: #6b7a90;
+    }
+
+    .filters-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .control-group label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1a2a44;
+    }
+
+    .control-group select {
+      padding: 11px 12px;
+      border: 1px solid #d3d9e3;
+      border-radius: 10px;
+      font-size: 15px;
+      background: #fff;
+    }
+
+    .library-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .library-card {
+      border: 1px solid #e5eaf2;
+      border-radius: 16px;
+      padding: 16px;
+      background: #fbfcff;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 20px;
+      color: #1a2a44;
+    }
+
+    .card-meta {
+      color: #6b7a90;
+      font-size: 14px;
+      margin-top: 6px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e9f0ff;
+      color: #264a8a;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+
+    .card-description {
+      margin: 0 0 14px;
+      color: #31415d;
+      line-height: 1.5;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .card-actions button {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #1a2a44;
+      color: white;
+    }
+
+    .card-actions button.secondary {
+      background: #edf2fb;
+      color: #1a2a44;
+    }
+
+    .viewer {
+      display: none;
+    }
+
+    .viewer.active {
+      display: block;
+    }
+
+    .viewer-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .viewer-title {
+      margin: 0;
+      font-size: 24px;
+      color: #1a2a44;
+    }
+
+    .viewer-subtitle {
+      margin: 4px 0 0;
+      color: #6b7a90;
+    }
+
+    .viewer-toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .viewer-toolbar button {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #1a2a44;
+      color: white;
+    }
+
+    .viewer-toolbar button.secondary {
+      background: #edf2fb;
+      color: #1a2a44;
+    }
+
+    .dialogue-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .dialogue-line {
+      border: 1px solid #e5eaf2;
+      border-radius: 14px;
+      padding: 16px;
+      background: #fbfcff;
     }
 
     .speaker {
-      font-weight: bold;
-      color: #1a2a44;
-      font-size: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #264a8a;
+      margin-bottom: 8px;
     }
 
-    .text {
+    .line-label {
+      font-size: 12px;
+      color: #6b7a90;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .line-text {
+      margin: 0 0 10px;
       font-size: 18px;
-      margin: 4px 0;
+      line-height: 1.5;
+      color: #1a2a44;
     }
 
-    .target {
-      color: #2a4d9b;
+    .line-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 8px;
     }
 
-    button {
-      margin-top: 5px;
-      padding: 8px 12px;
-      border-radius: 8px;
+    .line-actions button {
       border: none;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
       background: #1a2a44;
       color: white;
-      cursor: pointer;
-      font-size: 13px;
     }
 
-    .play-all {
-      margin-bottom: 15px;
-      background: #2a4d9b;
+    .line-actions button.secondary {
+      background: #edf2fb;
+      color: #1a2a44;
+    }
+
+    .empty-state {
+      padding: 24px;
+      text-align: center;
+      color: #6b7a90;
+      border: 1px dashed #c8d2e2;
+      border-radius: 14px;
+      background: #fbfcff;
+    }
+
+    .status-text {
+      margin: 0;
+      color: #31415d;
+      font-size: 15px;
+    }
+
+    @media (max-width: 900px) {
+      .filters-grid,
+      .library-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
-
 <body>
+  <div class="page-shell">
+    <div class="topbar">
+      <a class="back-link" href="../../index.html">← Back Home</a>
 
-<div class="page">
+      <div class="brand-wrap">
+        <h1>Library</h1>
+        <p>FluentProfessionals · Language for professionals</p>
+      </div>
+    </div>
 
-  <div class="topbar">
-    <a href="../../index.html" class="back">← Back</a>
-    <h2>Library</h2>
+    <section class="panel">
+      <h2 class="section-title">Choose your library</h2>
+      <p class="section-subtitle">Browse dialogues and practical scripts by profession, language and category.</p>
+
+      <div class="filters-grid">
+        <div class="control-group">
+          <label for="professionSelect">Profession</label>
+          <select id="professionSelect">
+            <option value="law">Law</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="sourceLangSelect">Home language</label>
+          <select id="sourceLangSelect">
+            <option value="english">English</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="targetLangSelect">Target language</label>
+          <select id="targetLangSelect">
+            <option value="afrikaans">Afrikaans</option>
+            <option value="isizulu">isiZulu</option>
+            <option value="setswana">Setswana</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="categorySelect">Category</label>
+          <select id="categorySelect">
+            <option value="all">All categories</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <p id="statusText" class="status-text">Loading library…</p>
+    </section>
+
+    <section id="libraryListPanel" class="panel">
+      <h2 class="section-title">Available dialogues</h2>
+      <p class="section-subtitle">Open a dialogue to read, listen and practise.</p>
+      <div id="libraryGrid" class="library-grid"></div>
+    </section>
+
+    <section id="viewerPanel" class="panel viewer">
+      <div class="viewer-header">
+        <div>
+          <h2 id="viewerTitle" class="viewer-title">Dialogue</h2>
+          <p id="viewerSubtitle" class="viewer-subtitle"></p>
+        </div>
+
+        <div class="viewer-toolbar">
+          <button id="backToLibraryBtn" class="secondary">← Back to library</button>
+          <button id="playConversationBtn">▶ Play target language</button>
+        </div>
+      </div>
+
+      <div id="dialogueList" class="dialogue-list"></div>
+    </section>
   </div>
 
-  <div id="dialogueContainer"></div>
+  <script type="module">
+    const professionSelect = document.getElementById("professionSelect");
+    const sourceLangSelect = document.getElementById("sourceLangSelect");
+    const targetLangSelect = document.getElementById("targetLangSelect");
+    const categorySelect = document.getElementById("categorySelect");
+    const statusText = document.getElementById("statusText");
+    const libraryGrid = document.getElementById("libraryGrid");
+    const libraryListPanel = document.getElementById("libraryListPanel");
+    const viewerPanel = document.getElementById("viewerPanel");
+    const viewerTitle = document.getElementById("viewerTitle");
+    const viewerSubtitle = document.getElementById("viewerSubtitle");
+    const dialogueList = document.getElementById("dialogueList");
+    const backToLibraryBtn = document.getElementById("backToLibraryBtn");
+    const playConversationBtn = document.getElementById("playConversationBtn");
 
-</div>
+    let libraryItems = [];
+    let currentDialogue = null;
 
-<script>
-function speak(text, lang="en-ZA") {
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = lang;
-  utterance.rate = 0.9;
-  speechSynthesis.speak(utterance);
-}
-
-function getLangCode(lang) {
-  return {
-    english: "en-ZA",
-    afrikaans: "af-ZA",
-    isizulu: "zu-ZA",
-    setswana: "tn-ZA"
-  }[lang] || "en-ZA";
-}
-
-async function loadDialogue() {
-  const response = await fetch("../data/law/dialogue-1.json");
-  const data = await response.json();
-
-  const container = document.getElementById("dialogueContainer");
-
-  const card = document.createElement("div");
-  card.className = "dialogue-card";
-
-  const title = document.createElement("h3");
-  title.textContent = data.title;
-  card.appendChild(title);
-
-  const playAll = document.createElement("button");
-  playAll.textContent = "▶ Play Conversation";
-  playAll.className = "play-all";
-
-  playAll.onclick = async () => {
-    for (let line of data.lines) {
-      speak(line.targetText, getLangCode(data.targetLanguage));
-      await new Promise(r => setTimeout(r, 2000));
+    function stopSpeaking() {
+      window.speechSynthesis.cancel();
     }
-  };
 
-  card.appendChild(playAll);
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
-  data.lines.forEach(line => {
-    const lineDiv = document.createElement("div");
-    lineDiv.className = "line";
+    function getSpeechLanguage(language) {
+      const map = {
+        english: "en-ZA",
+        afrikaans: "af-ZA",
+        isizulu: "zu-ZA",
+        setswana: "tn-ZA"
+      };
+      return map[language] || "en-ZA";
+    }
 
-    const speaker = document.createElement("div");
-    speaker.className = "speaker";
-    speaker.textContent = line.speaker;
+    function chooseVoice(langCode) {
+      const voices = window.speechSynthesis.getVoices();
+      if (!voices.length) return null;
 
-    const source = document.createElement("div");
-    source.className = "text";
-    source.textContent = line.sourceText;
+      const exact = voices.find(v => v.lang && v.lang.toLowerCase() === langCode.toLowerCase());
+      if (exact) return exact;
 
-    const target = document.createElement("div");
-    target.className = "text target";
-    target.textContent = line.targetText;
+      const prefix = langCode.split("-")[0].toLowerCase();
+      const fallback = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(prefix));
+      return fallback || null;
+    }
 
-    const btn = document.createElement("button");
-    btn.textContent = "🔊 Play";
-    btn.onclick = () => speak(line.targetText, getLangCode(data.targetLanguage));
+    function speak(text, languageKey) {
+      if (!text) return;
 
-    lineDiv.appendChild(speaker);
-    lineDiv.appendChild(source);
-    lineDiv.appendChild(target);
-    lineDiv.appendChild(btn);
+      stopSpeaking();
 
-    card.appendChild(lineDiv);
-  });
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = getSpeechLanguage(languageKey);
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
 
-  container.appendChild(card);
-}
+      const voice = chooseVoice(utterance.lang);
+      if (voice) utterance.voice = voice;
 
-loadDialogue();
-</script>
+      window.speechSynthesis.speak(utterance);
+    }
 
+    function speakQueued(text, languageKey) {
+      return new Promise(resolve => {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = getSpeechLanguage(languageKey);
+        utterance.rate = 0.9;
+        utterance.pitch = 1;
+
+        const voice = chooseVoice(utterance.lang);
+        if (voice) utterance.voice = voice;
+
+        utterance.onend = () => resolve();
+        utterance.onerror = () => resolve();
+
+        window.speechSynthesis.speak(utterance);
+      });
+    }
+
+    function capitalize(value) {
+      if (!value) return "";
+      if (value === "isizulu") return "isiZulu";
+      if (value === "setswana") return "Setswana";
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    }
+
+    function renderEmpty(container, message) {
+      container.innerHTML = "";
+      const empty = document.createElement("div");
+      empty.className = "empty-state";
+      empty.textContent = message;
+      container.appendChild(empty);
+    }
+
+    function updateCategoryOptions(items) {
+      const categories = [...new Set(items.map(item => item.category).filter(Boolean))];
+      const currentValue = categorySelect.value;
+
+      categorySelect.innerHTML = `<option value="all">All categories</option>`;
+
+      categories.forEach(category => {
+        const option = document.createElement("option");
+        option.value = category;
+        option.textContent = capitalize(category.replaceAll("_", " "));
+        categorySelect.appendChild(option);
+      });
+
+      if (categories.includes(currentValue)) {
+        categorySelect.value = currentValue;
+      } else {
+        categorySelect.value = "all";
+      }
+    }
+
+    function getLibraryIndexPath() {
+      const profession = professionSelect.value;
+      const sourceLang = sourceLangSelect.value;
+      const targetLang = targetLangSelect.value;
+      return `../data/${profession}/library-${sourceLang}-${targetLang}.json`;
+    }
+
+    function filteredItems() {
+      if (categorySelect.value === "all") return libraryItems;
+      return libraryItems.filter(item => item.category === categorySelect.value);
+    }
+
+    function renderLibraryCards() {
+      const items = filteredItems();
+      libraryGrid.innerHTML = "";
+
+      if (!items.length) {
+        renderEmpty(libraryGrid, "No library dialogues are available for this filter yet.");
+        return;
+      }
+
+      items.forEach(item => {
+        const card = document.createElement("article");
+        card.className = "library-card";
+
+        const top = document.createElement("div");
+        top.className = "card-top";
+
+        const textWrap = document.createElement("div");
+        const title = document.createElement("h3");
+        title.className = "card-title";
+        title.textContent = item.title;
+
+        const meta = document.createElement("div");
+        meta.className = "card-meta";
+        meta.textContent = `${item.lineCount || 0} lines · ${capitalize(item.category || "general")}`;
+
+        textWrap.appendChild(title);
+        textWrap.appendChild(meta);
+
+        const badge = document.createElement("span");
+        badge.className = "badge";
+        badge.textContent = item.category || "general";
+
+        top.appendChild(textWrap);
+        top.appendChild(badge);
+
+        const description = document.createElement("p");
+        description.className = "card-description";
+        description.textContent = item.description || "Open this dialogue to read and listen.";
+
+        const actions = document.createElement("div");
+        actions.className = "card-actions";
+
+        const openBtn = document.createElement("button");
+        openBtn.textContent = "Open dialogue";
+        openBtn.addEventListener("click", () => openDialogue(item.file));
+
+        const previewBtn = document.createElement("button");
+        previewBtn.className = "secondary";
+        previewBtn.textContent = "Play first line";
+        previewBtn.addEventListener("click", async () => {
+          try {
+            const response = await fetch(`../data/${professionSelect.value}/${item.file}`);
+            const data = await response.json();
+            if (data.lines && data.lines.length) {
+              speak(data.lines[0].targetText, data.targetLanguage);
+            }
+          } catch (error) {
+            console.error(error);
+          }
+        });
+
+        actions.appendChild(openBtn);
+        actions.appendChild(previewBtn);
+
+        card.appendChild(top);
+        card.appendChild(description);
+        card.appendChild(actions);
+
+        libraryGrid.appendChild(card);
+      });
+    }
+
+    async function loadLibraryIndex() {
+      const path = getLibraryIndexPath();
+      statusText.textContent = `Loading library: ${sourceLangSelect.value} → ${targetLangSelect.value}...`;
+
+      try {
+        const response = await fetch(path);
+        if (!response.ok) {
+          throw new Error(`Could not load ${path}`);
+        }
+
+        const data = await response.json();
+        libraryItems = data.items || [];
+        updateCategoryOptions(libraryItems);
+        renderLibraryCards();
+
+        statusText.textContent = `Showing ${libraryItems.length} dialogue${libraryItems.length === 1 ? "" : "s"} for ${capitalize(sourceLangSelect.value)} → ${capitalize(targetLangSelect.value)}.`;
+
+        viewerPanel.classList.remove("active");
+        libraryListPanel.style.display = "block";
+        currentDialogue = null;
+      } catch (error) {
+        console.error(error);
+        libraryItems = [];
+        updateCategoryOptions([]);
+        renderEmpty(libraryGrid, "This library file is not available yet. Add the library JSON file, then reload the page.");
+        statusText.textContent = `Could not load ${path}`;
+        viewerPanel.classList.remove("active");
+        libraryListPanel.style.display = "block";
+      }
+    }
+
+    async function openDialogue(fileName) {
+      const profession = professionSelect.value;
+      const path = `../data/${profession}/${fileName}`;
+
+      try {
+        const response = await fetch(path);
+        if (!response.ok) {
+          throw new Error(`Could not load ${path}`);
+        }
+
+        const data = await response.json();
+        currentDialogue = data;
+        renderDialogue(data);
+        libraryListPanel.style.display = "none";
+        viewerPanel.classList.add("active");
+      } catch (error) {
+        console.error(error);
+        alert("This dialogue could not be opened yet.");
+      }
+    }
+
+    function renderDialogue(data) {
+      viewerTitle.textContent = data.title || "Dialogue";
+      viewerSubtitle.textContent = `${capitalize(data.category || "general")} · ${capitalize(data.sourceLanguage)} → ${capitalize(data.targetLanguage)}`;
+
+      dialogueList.innerHTML = "";
+
+      if (!data.lines || !data.lines.length) {
+        renderEmpty(dialogueList, "This dialogue has no lines yet.");
+        return;
+      }
+
+      data.lines.forEach(line => {
+        const article = document.createElement("article");
+        article.className = "dialogue-line";
+
+        const speaker = document.createElement("div");
+        speaker.className = "speaker";
+        speaker.textContent = line.speaker || "Speaker";
+
+        const sourceLabel = document.createElement("div");
+        sourceLabel.className = "line-label";
+        sourceLabel.textContent = capitalize(data.sourceLanguage);
+
+        const sourceText = document.createElement("p");
+        sourceText.className = "line-text";
+        sourceText.textContent = line.sourceText || "";
+
+        const targetLabel = document.createElement("div");
+        targetLabel.className = "line-label";
+        targetLabel.textContent = capitalize(data.targetLanguage);
+
+        const targetText = document.createElement("p");
+        targetText.className = "line-text";
+        targetText.textContent = line.targetText || "";
+
+        const actions = document.createElement("div");
+        actions.className = "line-actions";
+
+        const sourceBtn = document.createElement("button");
+        sourceBtn.textContent = `🔊 ${capitalize(data.sourceLanguage)}`;
+        sourceBtn.addEventListener("click", () => speak(line.sourceText, data.sourceLanguage));
+
+        const targetBtn = document.createElement("button");
+        targetBtn.className = "secondary";
+        targetBtn.textContent = `🔊 ${capitalize(data.targetLanguage)}`;
+        targetBtn.addEventListener("click", () => speak(line.targetText, data.targetLanguage));
+
+        actions.appendChild(sourceBtn);
+        actions.appendChild(targetBtn);
+
+        article.appendChild(speaker);
+        article.appendChild(sourceLabel);
+        article.appendChild(sourceText);
+        article.appendChild(targetLabel);
+        article.appendChild(targetText);
+        article.appendChild(actions);
+
+        dialogueList.appendChild(article);
+      });
+    }
+
+    async function playCurrentDialogue() {
+      if (!currentDialogue || !currentDialogue.lines || !currentDialogue.lines.length) return;
+
+      stopSpeaking();
+
+      for (const line of currentDialogue.lines) {
+        await speakQueued(line.targetText, currentDialogue.targetLanguage);
+        await sleep(180);
+      }
+    }
+
+    categorySelect.addEventListener("change", renderLibraryCards);
+    professionSelect.addEventListener("change", loadLibraryIndex);
+    sourceLangSelect.addEventListener("change", loadLibraryIndex);
+    targetLangSelect.addEventListener("change", loadLibraryIndex);
+
+    backToLibraryBtn.addEventListener("click", () => {
+      viewerPanel.classList.remove("active");
+      libraryListPanel.style.display = "block";
+      stopSpeaking();
+    });
+
+    playConversationBtn.addEventListener("click", playCurrentDialogue);
+
+    window.speechSynthesis.onvoiceschanged = () => {};
+
+    loadLibraryIndex();
+  </script>
 </body>
 </html>
