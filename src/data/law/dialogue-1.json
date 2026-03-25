@@ -8,42 +8,66 @@
     {
       "speaker": "Lawyer",
       "sourceText": "Good morning",
-      "targetText": "Goeie môre"
+      "targetText": "Goeie môre",
+      "audio": {
+        "target": "../audio/law/afrikaans/dialogues/dialogue-1_line_01.mp3"
+      }
     },
     {
       "speaker": "Client",
       "sourceText": "Good morning",
-      "targetText": "Goeie môre"
+      "targetText": "Goeie môre",
+      "audio": {
+        "target": "../audio/law/afrikaans/dialogues/dialogue-1_line_02.mp3"
+      }
     },
     {
       "speaker": "Lawyer",
       "sourceText": "Please tell me what happened",
-      "targetText": "Vertel my asseblief wat gebeur het"
+      "targetText": "Vertel my asseblief wat gebeur het.",
+      "audio": {
+        "target": "../audio/law/afrikaans/dialogues/dialogue-1_line_03.mp3"
+      }
     },
     {
       "speaker": "Client",
       "sourceText": "I need help with a document",
-      "targetText": "Ek het hulp nodig met 'n dokument"
+      "targetText": "Ek het hulp nodig met 'n dokument.",
+      "audio": {
+        "target": "../audio/law/afrikaans/dialogues/dialogue-1_line_04.mp3"
+      }
     },
     {
       "speaker": "Lawyer",
       "sourceText": "Please read this document carefully",
-      "targetText": "Lees asseblief hierdie dokument sorgvuldig"
+      "targetText": "Lees asseblief hierdie dokument sorgvuldig.",
+      "audio": {
+        "target": "../audio/law/afrikaans/dialogues/dialogue-1_line_05.mp3"
+      }
     },
     {
       "speaker": "Client",
       "sourceText": "I do not understand",
-      "targetText": "Ek verstaan nie"
+      "targetText": "Ek verstaan nie.",
+      "audio": {
+        "target": "../audio/law/afrikaans/dialogues/dialogue-1_line_06.mp3"
+      }
     },
     {
       "speaker": "Lawyer",
       "sourceText": "I will explain it",
-      "targetText": "Ek sal dit verduidelik"
+      "targetText": "Ek sal dit verduidelik.",
+      "audio": {
+        "target": "../audio/law/afrikaans/dialogues/dialogue-1_line_07.mp3"
+      }
     },
     {
       "speaker": "Lawyer",
       "sourceText": "Please sign here",
-      "targetText": "Teken asseblief hier"
+      "targetText": "Teken asseblief hier.",
+      "audio": {
+        "target": "../audio/law/afrikaans/dialogues/dialogue-1_line_08.mp3"
+      }
     }
   ]
 }
