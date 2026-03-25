@@ -203,7 +203,7 @@
 
     .meta-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 12px;
       margin-top: 16px;
     }
@@ -296,7 +296,7 @@
       color: #6b7a90;
       font-weight: 700;
       text-transform: uppercase;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     .file-path {
@@ -304,6 +304,7 @@
       color: #1a2a44;
       font-weight: 700;
       word-break: break-word;
+      line-height: 1.45;
     }
 
     .empty-state {
@@ -319,6 +320,17 @@
       margin-top: 12px;
       color: #6b7a90;
       font-size: 14px;
+    }
+
+    .instruction-box {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 14px;
+      background: #f3f7ff;
+      border: 1px solid #d9e4f7;
+      color: #1a2a44;
+      font-weight: 600;
+      line-height: 1.5;
     }
 
     @media (max-width: 980px) {
@@ -430,7 +442,7 @@
 
     <section class="panel">
       <h2 class="section-title">Generated file plan</h2>
-      <p class="section-subtitle">Use these filenames when you save audio into your project folders.</p>
+      <p class="section-subtitle">Use these filenames and save paths when placing audio into your project folders.</p>
       <div id="fileList" class="file-list"></div>
     </section>
   </div>
@@ -480,24 +492,6 @@
 
     function getStorageKey() {
       return `audio-engine:${contentTypeSelect.value}:${professionSelect.value}:${sourceLangSelect.value}:${targetLangSelect.value}:${dialogueSelect.value}`;
-    }
-
-    function getPathInfo() {
-      const profession = professionSelect.value;
-      const source = sourceLangSelect.value;
-      const target = targetLangSelect.value;
-
-      if (contentTypeSelect.value === "phrases") {
-        return {
-          fetchPath: `../data/${profession}/${source}-${target}.json`,
-          audioFolder: `../audio/${profession}/${target}/`
-        };
-      }
-
-      return {
-        fetchPath: `../data/${profession}/${dialogueSelect.value}`,
-        audioFolder: `../audio/${profession}/${target}/dialogues/`
-      };
     }
 
     function chooseVoiceByName(name) {
@@ -611,29 +605,37 @@
     }
 
     function normalizeLoadedItems(data) {
-      if (contentTypeSelect.value === "phrases") {
-        const audioFolder = getPathInfo().audioFolder;
+      const profession = professionSelect.value;
+      const target = targetLangSelect.value;
 
-        return (data.items || []).map((item, idx) => ({
-          id: item.id || `line_${idx + 1}`,
-          category: item.category || data.category || "general",
-          sourceText: item.sourceText || "",
-          targetText: item.targetText || "",
-          speaker: "",
-          tone: item.tone || "",
-          difficulty: item.difficulty || "",
-          filename: `${item.id || `line_${idx + 1}`}.mp3`,
-          audioPath: `${audioFolder}${item.id || `line_${idx + 1}`}.mp3`,
-          approved: false,
-          note: ""
-        }));
+      if (contentTypeSelect.value === "phrases") {
+        return (data.items || []).map((item, idx) => {
+          const itemId = item.id || `line_${idx + 1}`;
+          const filename = `${itemId}.mp3`;
+
+          return {
+            id: itemId,
+            category: item.category || data.category || "general",
+            sourceText: item.sourceText || "",
+            targetText: item.targetText || "",
+            speaker: "",
+            tone: item.tone || "",
+            difficulty: item.difficulty || "",
+            filename,
+            audioPath: `../audio/${profession}/${target}/${filename}`,
+            projectPath: `src/audio/${profession}/${target}/${filename}`,
+            approved: false,
+            note: ""
+          };
+        });
       }
 
       const fileName = dialogueSelect.value;
-      const audioFolder = getPathInfo().audioFolder;
 
       return (data.lines || []).map((line, idx) => {
         const generatedId = buildDialogueLineId(fileName, idx);
+        const filename = `${generatedId}.mp3`;
+
         return {
           id: generatedId,
           category: data.category || "general",
@@ -642,8 +644,9 @@
           speaker: line.speaker || "",
           tone: "",
           difficulty: "",
-          filename: `${generatedId}.mp3`,
-          audioPath: `${audioFolder}${generatedId}.mp3`,
+          filename,
+          audioPath: `../audio/${profession}/${target}/dialogues/${filename}`,
+          projectPath: `src/audio/${profession}/${target}/dialogues/${filename}`,
           approved: false,
           note: ""
         };
@@ -669,12 +672,18 @@
         id.className = "file-id";
         id.textContent = `${item.id}${item.approved ? " · approved" : ""}`;
 
-        const path = document.createElement("p");
-        path.className = "file-path";
-        path.textContent = item.audioPath;
+        const appPath = document.createElement("p");
+        appPath.className = "file-path";
+        appPath.textContent = `App path: ${item.audioPath}`;
+
+        const projectPath = document.createElement("p");
+        projectPath.className = "file-path";
+        projectPath.style.marginTop = "6px";
+        projectPath.textContent = `Save in repo: ${item.projectPath}`;
 
         article.appendChild(id);
-        article.appendChild(path);
+        article.appendChild(appPath);
+        article.appendChild(projectPath);
         fileList.appendChild(article);
       });
     }
@@ -736,11 +745,13 @@
 
       const metaId = makeMetaBox("ID", item.id);
       const metaFile = makeMetaBox("Filename", item.filename);
-      const metaAudio = makeMetaBox("Audio path", item.audioPath);
+      const metaAudio = makeMetaBox("App path", item.audioPath);
+      const metaProject = makeMetaBox("Project save path", item.projectPath);
 
       metaGrid.appendChild(metaId);
       metaGrid.appendChild(metaFile);
       metaGrid.appendChild(metaAudio);
+      metaGrid.appendChild(metaProject);
 
       if (item.speaker) {
         metaGrid.appendChild(makeMetaBox("Speaker", item.speaker));
@@ -840,9 +851,22 @@
         }
       });
 
+      const copyProjectPathBtn = document.createElement("button");
+      copyProjectPathBtn.className = "secondary";
+      copyProjectPathBtn.textContent = "Copy save path";
+      copyProjectPathBtn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(item.projectPath);
+          setStatus(`Copied save path for ${item.id}.`);
+        } catch {
+          setStatus("Could not copy save path from this browser.");
+        }
+      });
+
       checkToolbar.appendChild(approveBtn);
       checkToolbar.appendChild(copyTextBtn);
       checkToolbar.appendChild(copyFilenameBtn);
+      checkToolbar.appendChild(copyProjectPathBtn);
 
       const notesBox = document.createElement("div");
       notesBox.className = "notes-box";
@@ -914,9 +938,13 @@
       navToolbar.appendChild(nextBtn);
       navToolbar.appendChild(nextUnapprovedBtn);
 
+      const instructions = document.createElement("div");
+      instructions.className = "instruction-box";
+      instructions.textContent = "Generate this line in ElevenLabs or with your preferred laptop voice, then save it using the filename above in the exact project save path shown.";
+
       const note = document.createElement("p");
       note.className = "small-note";
-      note.textContent = "This page helps you organise and review audio lines. You can use the listed filenames when saving your generated audio into the repo.";
+      note.textContent = "This page helps you organise and review audio lines. Use the listed paths exactly so your phrases, library and practice pages can find the correct audio files.";
 
       card.appendChild(top);
       card.appendChild(sourceLabel);
@@ -929,6 +957,7 @@
       card.appendChild(notesBox);
       card.appendChild(checklist);
       card.appendChild(navToolbar);
+      card.appendChild(instructions);
       card.appendChild(note);
 
       engineContainer.appendChild(card);
@@ -971,7 +1000,13 @@
     }
 
     async function loadSource() {
-      const { fetchPath } = getPathInfo();
+      const profession = professionSelect.value;
+      const source = sourceLangSelect.value;
+      const target = targetLangSelect.value;
+      const fetchPath = contentTypeSelect.value === "phrases"
+        ? `../data/${profession}/${source}-${target}.json`
+        : `../data/${profession}/${dialogueSelect.value}`;
+
       setStatus(`Loading ${contentTypeSelect.value} source…`);
 
       try {
@@ -986,7 +1021,13 @@
 
         engineItems = normalized.map(item => {
           const previous = saved?.engineItems?.find(savedItem => savedItem.id === item.id);
-          return previous ? { ...item, approved: previous.approved, note: previous.note || "" } : item;
+          return previous
+            ? {
+                ...item,
+                approved: previous.approved,
+                note: previous.note || ""
+              }
+            : item;
         });
 
         currentIndex = Math.min(saved?.currentIndex || 0, Math.max(engineItems.length - 1, 0));
@@ -997,8 +1038,8 @@
         updateSummary();
 
         const label = contentTypeSelect.value === "phrases"
-          ? `${capitalize(sourceLangSelect.value)} → ${capitalize(targetLangSelect.value)} phrases loaded.`
-          : `${dialogueSelect.value} loaded for ${capitalize(targetLangSelect.value)} audio generation.`;
+          ? `${capitalize(source)} → ${capitalize(target)} phrases loaded.`
+          : `${dialogueSelect.value} loaded for ${capitalize(target)} audio generation.`;
 
         setStatus(label);
         saveState();
@@ -1036,6 +1077,7 @@
           category: item.category,
           filename: item.filename,
           audioPath: item.audioPath,
+          projectPath: item.projectPath,
           approved: item.approved,
           note: item.note
         }))
