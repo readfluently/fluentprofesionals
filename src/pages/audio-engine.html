@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FluentProfessionals | Audio Engine</title>
+  <link rel="stylesheet" href="../styles/main.css" />
+  <style>
+    .page-shell {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 20px 40px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .back-link {
+      display: inline-block;
+      text-decoration: none;
+      color: #1a2a44;
+      background: white;
+      border-radius: 12px;
+      padding: 10px 14px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      font-weight: 700;
+    }
+
+    .brand-wrap h1 {
+      margin: 0;
+      font-size: 30px;
+      color: #1a2a44;
+    }
+
+    .brand-wrap p {
+      margin: 4px 0 0;
+      color: #6b7a90;
+    }
+
+    .panel {
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      margin: 0 0 6px;
+      color: #1a2a44;
+      font-size: 22px;
+    }
+
+    .section-subtitle {
+      margin: 0;
+      color: #6b7a90;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .control-group label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1a2a44;
+    }
+
+    .control-group select,
+    .control-group input {
+      padding: 11px 12px;
+      border: 1px solid #d3d9e3;
+      border-radius: 10px;
+      font-size: 15px;
+      background: #fff;
+    }
+
+    .status-text {
+      margin: 0;
+      color: #31415d;
+      font-size: 15px;
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .summary-card {
+      background: #fbfcff;
+      border: 1px solid #e5eaf2;
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .summary-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #6b7a90;
+      margin-bottom: 6px;
+    }
+
+    .summary-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: #1a2a44;
+      margin: 0;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #1a2a44;
+      color: white;
+    }
+
+    button.secondary {
+      background: #edf2fb;
+      color: #1a2a44;
+    }
+
+    button.success {
+      background: #2f6d37;
+      color: white;
+    }
+
+    button.warn {
+      background: #a83232;
+      color: white;
+    }
+
+    .engine-card {
+      border: 1px solid #e5eaf2;
+      border-radius: 16px;
+      padding: 18px;
+      background: #fbfcff;
+    }
+
+    .engine-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e9f0ff;
+      color: #264a8a;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+
+    .line-label {
+      font-size: 12px;
+      color: #6b7a90;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      margin-top: 12px;
+    }
+
+    .line-text {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.5;
+      color: #1a2a44;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .meta-box {
+      background: white;
+      border: 1px solid #e5eaf2;
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .meta-box-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #6b7a90;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .meta-box-value {
+      margin: 0;
+      color: #1a2a44;
+      font-weight: 700;
+      word-break: break-word;
+    }
+
+    .nav-toolbar,
+    .voice-toolbar,
+    .check-toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .notes-box {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 14px;
+      background: #f3f7ff;
+      border: 1px solid #d9e4f7;
+    }
+
+    .notes-box textarea {
+      width: 100%;
+      min-height: 90px;
+      resize: vertical;
+      border: 1px solid #cfd9ea;
+      border-radius: 10px;
+      padding: 12px;
+      font: inherit;
+      box-sizing: border-box;
+    }
+
+    .check-list {
+      margin-top: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 12px;
+      background: white;
+      border: 1px solid #e5eaf2;
+    }
+
+    .check-item input[type="checkbox"] {
+      transform: scale(1.2);
+    }
+
+    .file-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .file-item {
+      background: #fbfcff;
+      border: 1px solid #e5eaf2;
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .file-id {
+      font-size: 12px;
+      color: #6b7a90;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .file-path {
+      margin: 0;
+      color: #1a2a44;
+      font-weight: 700;
+      word-break: break-word;
+    }
+
+    .empty-state {
+      padding: 24px;
+      text-align: center;
+      color: #6b7a90;
+      border: 1px dashed #c8d2e2;
+      border-radius: 14px;
+      background: #fbfcff;
+    }
+
+    .small-note {
+      margin-top: 12px;
+      color: #6b7a90;
+      font-size: 14px;
+    }
+
+    @media (max-width: 980px) {
+      .controls-grid,
+      .summary-row,
+      .meta-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .line-text {
+        font-size: 19px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <div class="topbar">
+      <a class="back-link" href="../../index.html">← Back Home</a>
+
+      <div class="brand-wrap">
+        <h1>Audio Engine</h1>
+        <p>FluentProfessionals · Language for professionals</p>
+      </div>
+    </div>
+
+    <section class="panel">
+      <h2 class="section-title">Choose your source file</h2>
+      <p class="section-subtitle">Preview, approve and organise the Afrikaans audio lines you want to generate.</p>
+
+      <div class="controls-grid">
+        <div class="control-group">
+          <label for="contentTypeSelect">Content type</label>
+          <select id="contentTypeSelect">
+            <option value="phrases">Phrases</option>
+            <option value="dialogue">Dialogue</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="professionSelect">Profession</label>
+          <select id="professionSelect">
+            <option value="law">Law</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="sourceLangSelect">Home language</label>
+          <select id="sourceLangSelect">
+            <option value="english">English</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="targetLangSelect">Target language</label>
+          <select id="targetLangSelect">
+            <option value="afrikaans">Afrikaans</option>
+            <option value="isizulu">isiZulu</option>
+            <option value="setswana">Setswana</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="dialogueSelect">Dialogue file</label>
+          <select id="dialogueSelect">
+            <option value="dialogue-1.json">dialogue-1.json</option>
+            <option value="dialogue-2.json">dialogue-2.json</option>
+            <option value="dialogue-3.json">dialogue-3.json</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <button id="loadBtn">Load source</button>
+        <button id="exportBtn" class="secondary">Export generation list</button>
+        <button id="resetApprovalBtn" class="warn">Reset approvals</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <p id="statusText" class="status-text">Choose a source and load it.</p>
+
+      <div class="summary-row">
+        <div class="summary-card">
+          <div class="summary-label">Total lines</div>
+          <p id="totalCount" class="summary-value">0</p>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-label">Approved</div>
+          <p id="approvedCount" class="summary-value">0</p>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-label">Remaining</div>
+          <p id="remainingCount" class="summary-value">0</p>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-label">Current item</div>
+          <p id="currentCount" class="summary-value">0 / 0</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div id="engineContainer"></div>
+    </section>
+
+    <section class="panel">
+      <h2 class="section-title">Generated file plan</h2>
+      <p class="section-subtitle">Use these filenames when you save audio into your project folders.</p>
+      <div id="fileList" class="file-list"></div>
+    </section>
+  </div>
+
+  <script type="module">
+    const contentTypeSelect = document.getElementById("contentTypeSelect");
+    const professionSelect = document.getElementById("professionSelect");
+    const sourceLangSelect = document.getElementById("sourceLangSelect");
+    const targetLangSelect = document.getElementById("targetLangSelect");
+    const dialogueSelect = document.getElementById("dialogueSelect");
+    const loadBtn = document.getElementById("loadBtn");
+    const exportBtn = document.getElementById("exportBtn");
+    const resetApprovalBtn = document.getElementById("resetApprovalBtn");
+    const statusText = document.getElementById("statusText");
+    const totalCount = document.getElementById("totalCount");
+    const approvedCount = document.getElementById("approvedCount");
+    const remainingCount = document.getElementById("remainingCount");
+    const currentCount = document.getElementById("currentCount");
+    const engineContainer = document.getElementById("engineContainer");
+    const fileList = document.getElementById("fileList");
+
+    let engineItems = [];
+    let currentIndex = 0;
+    let selectedVoiceName = "";
+    let selectedVoiceLang = "";
+
+    function capitalize(value) {
+      if (!value) return "";
+      if (value === "isizulu") return "isiZulu";
+      if (value === "setswana") return "Setswana";
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    }
+
+    function getSpeechLanguage(language) {
+      const map = {
+        english: "en-ZA",
+        afrikaans: "af-ZA",
+        isizulu: "zu-ZA",
+        setswana: "tn-ZA"
+      };
+      return map[language] || "en-ZA";
+    }
+
+    function stopSpeaking() {
+      window.speechSynthesis.cancel();
+    }
+
+    function getStorageKey() {
+      return `audio-engine:${contentTypeSelect.value}:${professionSelect.value}:${sourceLangSelect.value}:${targetLangSelect.value}:${dialogueSelect.value}`;
+    }
+
+    function getPathInfo() {
+      const profession = professionSelect.value;
+      const source = sourceLangSelect.value;
+      const target = targetLangSelect.value;
+
+      if (contentTypeSelect.value === "phrases") {
+        return {
+          fetchPath: `../data/${profession}/${source}-${target}.json`,
+          audioFolder: `../audio/${profession}/${target}/`
+        };
+      }
+
+      return {
+        fetchPath: `../data/${profession}/${dialogueSelect.value}`,
+        audioFolder: `../audio/${profession}/${target}/dialogues/`
+      };
+    }
+
+    function chooseVoiceByName(name) {
+      const voices = window.speechSynthesis.getVoices();
+      if (!voices.length) return null;
+      return voices.find(v => v.name === name) || null;
+    }
+
+    function chooseDefaultVoice(languageKey) {
+      const voices = window.speechSynthesis.getVoices();
+      const langCode = getSpeechLanguage(languageKey);
+
+      let exact = voices.find(v => v.lang && v.lang.toLowerCase() === langCode.toLowerCase());
+      if (exact) return exact;
+
+      const prefix = langCode.split("-")[0].toLowerCase();
+      let fallback = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(prefix));
+      if (fallback) return fallback;
+
+      return voices[0] || null;
+    }
+
+    function speak(text, languageKey, voiceName = "") {
+      if (!text) return;
+      stopSpeaking();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = getSpeechLanguage(languageKey);
+      utterance.rate = 0.88;
+      utterance.pitch = 1;
+
+      const voice = voiceName ? chooseVoiceByName(voiceName) : chooseDefaultVoice(languageKey);
+      if (voice) utterance.voice = voice;
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function saveState() {
+      localStorage.setItem(getStorageKey(), JSON.stringify({
+        engineItems,
+        currentIndex,
+        selectedVoiceName,
+        selectedVoiceLang
+      }));
+    }
+
+    function loadSavedState() {
+      const raw = localStorage.getItem(getStorageKey());
+      if (!raw) return null;
+
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return null;
+      }
+    }
+
+    function setStatus(text) {
+      statusText.textContent = text;
+    }
+
+    function updateSummary() {
+      const approved = engineItems.filter(item => item.approved).length;
+      totalCount.textContent = engineItems.length;
+      approvedCount.textContent = approved;
+      remainingCount.textContent = Math.max(engineItems.length - approved, 0);
+      currentCount.textContent = engineItems.length ? `${currentIndex + 1} / ${engineItems.length}` : "0 / 0";
+    }
+
+    function renderEmpty(message) {
+      engineContainer.innerHTML = "";
+      const empty = document.createElement("div");
+      empty.className = "empty-state";
+      empty.textContent = message;
+      engineContainer.appendChild(empty);
+    }
+
+    function populateVoiceSelect(selectEl, languageKey, selectedName = "") {
+      const voices = window.speechSynthesis.getVoices();
+      const langCode = getSpeechLanguage(languageKey);
+      const prefix = langCode.split("-")[0].toLowerCase();
+
+      const relevantVoices = voices.filter(v =>
+        v.lang &&
+        (
+          v.lang.toLowerCase() === langCode.toLowerCase() ||
+          v.lang.toLowerCase().startsWith(prefix)
+        )
+      );
+
+      const finalVoices = relevantVoices.length ? relevantVoices : voices;
+
+      selectEl.innerHTML = "";
+
+      finalVoices.forEach(voice => {
+        const option = document.createElement("option");
+        option.value = voice.name;
+        option.textContent = `${voice.name} (${voice.lang})`;
+        if (voice.name === selectedName) option.selected = true;
+        selectEl.appendChild(option);
+      });
+
+      if (!selectedName && finalVoices[0]) {
+        selectEl.value = finalVoices[0].name;
+      }
+    }
+
+    function buildDialogueLineId(fileName, lineIndex) {
+      const base = fileName.replace(".json", "").replaceAll("_", "-");
+      return `${base}_line_${String(lineIndex + 1).padStart(2, "0")}`;
+    }
+
+    function normalizeLoadedItems(data) {
+      if (contentTypeSelect.value === "phrases") {
+        const audioFolder = getPathInfo().audioFolder;
+
+        return (data.items || []).map((item, idx) => ({
+          id: item.id || `line_${idx + 1}`,
+          category: item.category || data.category || "general",
+          sourceText: item.sourceText || "",
+          targetText: item.targetText || "",
+          speaker: "",
+          tone: item.tone || "",
+          difficulty: item.difficulty || "",
+          filename: `${item.id || `line_${idx + 1}`}.mp3`,
+          audioPath: `${audioFolder}${item.id || `line_${idx + 1}`}.mp3`,
+          approved: false,
+          note: ""
+        }));
+      }
+
+      const fileName = dialogueSelect.value;
+      const audioFolder = getPathInfo().audioFolder;
+
+      return (data.lines || []).map((line, idx) => {
+        const generatedId = buildDialogueLineId(fileName, idx);
+        return {
+          id: generatedId,
+          category: data.category || "general",
+          sourceText: line.sourceText || "",
+          targetText: line.targetText || "",
+          speaker: line.speaker || "",
+          tone: "",
+          difficulty: "",
+          filename: `${generatedId}.mp3`,
+          audioPath: `${audioFolder}${generatedId}.mp3`,
+          approved: false,
+          note: ""
+        };
+      });
+    }
+
+    function renderFilePlan() {
+      fileList.innerHTML = "";
+
+      if (!engineItems.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.textContent = "Load a source first to see the generation plan.";
+        fileList.appendChild(empty);
+        return;
+      }
+
+      engineItems.forEach(item => {
+        const article = document.createElement("article");
+        article.className = "file-item";
+
+        const id = document.createElement("div");
+        id.className = "file-id";
+        id.textContent = `${item.id}${item.approved ? " · approved" : ""}`;
+
+        const path = document.createElement("p");
+        path.className = "file-path";
+        path.textContent = item.audioPath;
+
+        article.appendChild(id);
+        article.appendChild(path);
+        fileList.appendChild(article);
+      });
+    }
+
+    function renderEngineCard() {
+      if (!engineItems.length) {
+        renderEmpty("No lines were found in this source file.");
+        updateSummary();
+        renderFilePlan();
+        return;
+      }
+
+      const item = engineItems[currentIndex];
+      engineContainer.innerHTML = "";
+
+      const card = document.createElement("div");
+      card.className = "engine-card";
+
+      const top = document.createElement("div");
+      top.className = "engine-top";
+
+      const titleWrap = document.createElement("div");
+      const title = document.createElement("h2");
+      title.className = "section-title";
+      title.textContent = "Audio generation item";
+
+      const subtitle = document.createElement("p");
+      subtitle.className = "section-subtitle";
+      subtitle.textContent = "Preview the target line, confirm the voice, then mark it ready for generation.";
+
+      titleWrap.appendChild(title);
+      titleWrap.appendChild(subtitle);
+
+      const badge = document.createElement("span");
+      badge.className = "badge";
+      badge.textContent = item.category;
+
+      top.appendChild(titleWrap);
+      top.appendChild(badge);
+
+      const sourceLabel = document.createElement("div");
+      sourceLabel.className = "line-label";
+      sourceLabel.textContent = capitalize(sourceLangSelect.value);
+
+      const sourceText = document.createElement("p");
+      sourceText.className = "line-text";
+      sourceText.textContent = item.sourceText || "—";
+
+      const targetLabel = document.createElement("div");
+      targetLabel.className = "line-label";
+      targetLabel.textContent = `${capitalize(targetLangSelect.value)} · line to generate`;
+
+      const targetText = document.createElement("p");
+      targetText.className = "line-text";
+      targetText.textContent = item.targetText || "—";
+
+      const metaGrid = document.createElement("div");
+      metaGrid.className = "meta-grid";
+
+      const metaId = makeMetaBox("ID", item.id);
+      const metaFile = makeMetaBox("Filename", item.filename);
+      const metaAudio = makeMetaBox("Audio path", item.audioPath);
+
+      metaGrid.appendChild(metaId);
+      metaGrid.appendChild(metaFile);
+      metaGrid.appendChild(metaAudio);
+
+      if (item.speaker) {
+        metaGrid.appendChild(makeMetaBox("Speaker", item.speaker));
+      }
+      if (item.tone) {
+        metaGrid.appendChild(makeMetaBox("Tone", item.tone));
+      }
+      if (item.difficulty) {
+        metaGrid.appendChild(makeMetaBox("Difficulty", item.difficulty));
+      }
+
+      const voiceToolbar = document.createElement("div");
+      voiceToolbar.className = "voice-toolbar";
+
+      const voiceSelectWrap = document.createElement("div");
+      voiceSelectWrap.style.flex = "1 1 320px";
+
+      const voiceLabel = document.createElement("div");
+      voiceLabel.className = "line-label";
+      voiceLabel.textContent = "Voice";
+
+      const voiceSelect = document.createElement("select");
+      voiceSelect.style.width = "100%";
+      voiceSelect.style.padding = "11px 12px";
+      voiceSelect.style.border = "1px solid #d3d9e3";
+      voiceSelect.style.borderRadius = "10px";
+      voiceSelect.style.fontSize = "15px";
+      populateVoiceSelect(voiceSelect, targetLangSelect.value, selectedVoiceName);
+
+      selectedVoiceName = voiceSelect.value || selectedVoiceName;
+      selectedVoiceLang = chooseVoiceByName(selectedVoiceName)?.lang || "";
+
+      voiceSelect.addEventListener("change", () => {
+        selectedVoiceName = voiceSelect.value;
+        selectedVoiceLang = chooseVoiceByName(selectedVoiceName)?.lang || "";
+        saveState();
+      });
+
+      voiceSelectWrap.appendChild(voiceLabel);
+      voiceSelectWrap.appendChild(voiceSelect);
+
+      const previewTargetBtn = document.createElement("button");
+      previewTargetBtn.textContent = "🔊 Preview target";
+      previewTargetBtn.addEventListener("click", () => {
+        selectedVoiceName = voiceSelect.value;
+        selectedVoiceLang = chooseVoiceByName(selectedVoiceName)?.lang || "";
+        speak(item.targetText, targetLangSelect.value, selectedVoiceName);
+        saveState();
+      });
+
+      const previewSourceBtn = document.createElement("button");
+      previewSourceBtn.className = "secondary";
+      previewSourceBtn.textContent = "🔊 Preview source";
+      previewSourceBtn.addEventListener("click", () => {
+        speak(item.sourceText, sourceLangSelect.value);
+      });
+
+      voiceToolbar.appendChild(voiceSelectWrap);
+      voiceToolbar.appendChild(previewTargetBtn);
+      voiceToolbar.appendChild(previewSourceBtn);
+
+      const checkToolbar = document.createElement("div");
+      checkToolbar.className = "check-toolbar";
+
+      const approveBtn = document.createElement("button");
+      approveBtn.className = item.approved ? "secondary" : "success";
+      approveBtn.textContent = item.approved ? "✓ Approved" : "Mark approved";
+      approveBtn.addEventListener("click", () => {
+        item.approved = !item.approved;
+        saveState();
+        renderEngineCard();
+        updateSummary();
+        renderFilePlan();
+      });
+
+      const copyTextBtn = document.createElement("button");
+      copyTextBtn.className = "secondary";
+      copyTextBtn.textContent = "Copy target text";
+      copyTextBtn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(item.targetText);
+          setStatus(`Copied target text for ${item.id}.`);
+        } catch {
+          setStatus("Could not copy text from this browser.");
+        }
+      });
+
+      const copyFilenameBtn = document.createElement("button");
+      copyFilenameBtn.className = "secondary";
+      copyFilenameBtn.textContent = "Copy filename";
+      copyFilenameBtn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(item.filename);
+          setStatus(`Copied filename for ${item.id}.`);
+        } catch {
+          setStatus("Could not copy filename from this browser.");
+        }
+      });
+
+      checkToolbar.appendChild(approveBtn);
+      checkToolbar.appendChild(copyTextBtn);
+      checkToolbar.appendChild(copyFilenameBtn);
+
+      const notesBox = document.createElement("div");
+      notesBox.className = "notes-box";
+
+      const notesLabel = document.createElement("div");
+      notesLabel.className = "line-label";
+      notesLabel.textContent = "Notes for this line";
+
+      const notes = document.createElement("textarea");
+      notes.placeholder = "Example: Good voice on laptop. Slight pause after asseblief.";
+      notes.value = item.note || "";
+      notes.addEventListener("input", () => {
+        item.note = notes.value;
+        saveState();
+      });
+
+      notesBox.appendChild(notesLabel);
+      notesBox.appendChild(notes);
+
+      const checklist = document.createElement("div");
+      checklist.className = "check-list";
+
+      checklist.appendChild(makeCheckRow("Text looks correct", true));
+      checklist.appendChild(makeCheckRow("Voice sounds natural", item.approved));
+      checklist.appendChild(makeCheckRow("Filename is clear", true));
+
+      const navToolbar = document.createElement("div");
+      navToolbar.className = "nav-toolbar";
+
+      const prevBtn = document.createElement("button");
+      prevBtn.className = "secondary";
+      prevBtn.textContent = "← Previous";
+      prevBtn.disabled = currentIndex === 0;
+      prevBtn.addEventListener("click", () => {
+        stopSpeaking();
+        currentIndex -= 1;
+        saveState();
+        renderEngineCard();
+        updateSummary();
+      });
+
+      const nextBtn = document.createElement("button");
+      nextBtn.textContent = "Next →";
+      nextBtn.disabled = currentIndex === engineItems.length - 1;
+      nextBtn.addEventListener("click", () => {
+        stopSpeaking();
+        currentIndex += 1;
+        saveState();
+        renderEngineCard();
+        updateSummary();
+      });
+
+      const nextUnapprovedBtn = document.createElement("button");
+      nextUnapprovedBtn.className = "secondary";
+      nextUnapprovedBtn.textContent = "Next unapproved";
+      nextUnapprovedBtn.addEventListener("click", () => {
+        const nextIndex = engineItems.findIndex((entry, idx) => idx > currentIndex && !entry.approved);
+        if (nextIndex !== -1) {
+          currentIndex = nextIndex;
+          saveState();
+          renderEngineCard();
+          updateSummary();
+        } else {
+          setStatus("No later unapproved items were found.");
+        }
+      });
+
+      navToolbar.appendChild(prevBtn);
+      navToolbar.appendChild(nextBtn);
+      navToolbar.appendChild(nextUnapprovedBtn);
+
+      const note = document.createElement("p");
+      note.className = "small-note";
+      note.textContent = "This page helps you organise and review audio lines. You can use the listed filenames when saving your generated audio into the repo.";
+
+      card.appendChild(top);
+      card.appendChild(sourceLabel);
+      card.appendChild(sourceText);
+      card.appendChild(targetLabel);
+      card.appendChild(targetText);
+      card.appendChild(metaGrid);
+      card.appendChild(voiceToolbar);
+      card.appendChild(checkToolbar);
+      card.appendChild(notesBox);
+      card.appendChild(checklist);
+      card.appendChild(navToolbar);
+      card.appendChild(note);
+
+      engineContainer.appendChild(card);
+      updateSummary();
+      renderFilePlan();
+    }
+
+    function makeMetaBox(title, value) {
+      const box = document.createElement("div");
+      box.className = "meta-box";
+
+      const t = document.createElement("div");
+      t.className = "meta-box-title";
+      t.textContent = title;
+
+      const v = document.createElement("p");
+      v.className = "meta-box-value";
+      v.textContent = value || "—";
+
+      box.appendChild(t);
+      box.appendChild(v);
+      return box;
+    }
+
+    function makeCheckRow(text, checked) {
+      const row = document.createElement("label");
+      row.className = "check-item";
+
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.checked = checked;
+      input.disabled = true;
+
+      const span = document.createElement("span");
+      span.textContent = text;
+
+      row.appendChild(input);
+      row.appendChild(span);
+      return row;
+    }
+
+    async function loadSource() {
+      const { fetchPath } = getPathInfo();
+      setStatus(`Loading ${contentTypeSelect.value} source…`);
+
+      try {
+        const response = await fetch(fetchPath);
+        if (!response.ok) {
+          throw new Error(`Could not load ${fetchPath}`);
+        }
+
+        const data = await response.json();
+        const normalized = normalizeLoadedItems(data);
+        const saved = loadSavedState();
+
+        engineItems = normalized.map(item => {
+          const previous = saved?.engineItems?.find(savedItem => savedItem.id === item.id);
+          return previous ? { ...item, approved: previous.approved, note: previous.note || "" } : item;
+        });
+
+        currentIndex = Math.min(saved?.currentIndex || 0, Math.max(engineItems.length - 1, 0));
+        selectedVoiceName = saved?.selectedVoiceName || "";
+        selectedVoiceLang = saved?.selectedVoiceLang || "";
+
+        renderEngineCard();
+        updateSummary();
+
+        const label = contentTypeSelect.value === "phrases"
+          ? `${capitalize(sourceLangSelect.value)} → ${capitalize(targetLangSelect.value)} phrases loaded.`
+          : `${dialogueSelect.value} loaded for ${capitalize(targetLangSelect.value)} audio generation.`;
+
+        setStatus(label);
+        saveState();
+      } catch (error) {
+        console.error(error);
+        engineItems = [];
+        currentIndex = 0;
+        selectedVoiceName = "";
+        selectedVoiceLang = "";
+        renderEmpty("This source file could not be loaded yet.");
+        renderFilePlan();
+        updateSummary();
+        setStatus("Could not load the selected source file.");
+      }
+    }
+
+    function exportGenerationList() {
+      if (!engineItems.length) {
+        setStatus("Load a source first before exporting.");
+        return;
+      }
+
+      const payload = {
+        contentType: contentTypeSelect.value,
+        profession: professionSelect.value,
+        sourceLanguage: sourceLangSelect.value,
+        targetLanguage: targetLangSelect.value,
+        selectedVoiceName,
+        selectedVoiceLang,
+        items: engineItems.map(item => ({
+          id: item.id,
+          sourceText: item.sourceText,
+          targetText: item.targetText,
+          speaker: item.speaker,
+          category: item.category,
+          filename: item.filename,
+          audioPath: item.audioPath,
+          approved: item.approved,
+          note: item.note
+        }))
+      };
+
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      const suffix = contentTypeSelect.value === "phrases"
+        ? `${sourceLangSelect.value}-${targetLangSelect.value}`
+        : dialogueSelect.value.replace(".json", "");
+
+      link.href = url;
+      link.download = `audio-generation-${suffix}.json`;
+      link.click();
+
+      URL.revokeObjectURL(url);
+      setStatus("Generation list exported.");
+    }
+
+    function resetApprovals() {
+      if (!engineItems.length) {
+        setStatus("There is nothing to reset yet.");
+        return;
+      }
+
+      engineItems = engineItems.map(item => ({
+        ...item,
+        approved: false,
+        note: ""
+      }));
+
+      currentIndex = 0;
+      saveState();
+      renderEngineCard();
+      updateSummary();
+      renderFilePlan();
+      setStatus("Approvals and notes were reset for this source.");
+    }
+
+    function updateDialogueVisibility() {
+      const isDialogue = contentTypeSelect.value === "dialogue";
+      dialogueSelect.disabled = !isDialogue;
+    }
+
+    loadBtn.addEventListener("click", loadSource);
+    exportBtn.addEventListener("click", exportGenerationList);
+    resetApprovalBtn.addEventListener("click", resetApprovals);
+
+    contentTypeSelect.addEventListener("change", () => {
+      stopSpeaking();
+      updateDialogueVisibility();
+    });
+
+    professionSelect.addEventListener("change", () => stopSpeaking());
+    sourceLangSelect.addEventListener("change", () => stopSpeaking());
+    targetLangSelect.addEventListener("change", () => stopSpeaking());
+    dialogueSelect.addEventListener("change", () => stopSpeaking());
+
+    window.speechSynthesis.onvoiceschanged = () => {};
+
+    updateDialogueVisibility();
+    renderEmpty("Load a phrase file or dialogue file to start building your audio list.");
+    renderFilePlan();
+    updateSummary();
+  </script>
+</body>
+</html>
