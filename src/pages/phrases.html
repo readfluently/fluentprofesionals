@@ -210,7 +210,7 @@
 
     <section class="controls-card">
       <h2 class="section-title">Choose your lesson</h2>
-      <p class="section-subtitle">Start with law phrases and switch languages as you grow the app.</p>
+      <p class="section-subtitle">Saved audio plays first. If audio is missing, the page uses TTS.</p>
 
       <div class="controls-grid" style="margin-top: 18px;">
         <div class="control-group">
@@ -245,7 +245,6 @@
     <section class="phrases-card">
       <h2 class="section-title">Phrase list</h2>
       <p class="section-subtitle">Tap a button to hear the English or target-language version.</p>
-
       <div id="phraseList" class="phrase-list"></div>
     </section>
   </div>
@@ -257,21 +256,34 @@
     const phraseList = document.getElementById("phraseList");
     const statusText = document.getElementById("statusText");
 
+    let activeAudio = null;
+
     function stopSpeaking() {
       window.speechSynthesis.cancel();
     }
 
-    function chooseVoice(text, langCode) {
+    function stopAudio() {
+      if (activeAudio) {
+        activeAudio.pause();
+        activeAudio.currentTime = 0;
+        activeAudio = null;
+      }
+    }
+
+    function stopAllPlayback() {
+      stopSpeaking();
+      stopAudio();
+    }
+
+    function chooseVoice(langCode) {
       const voices = window.speechSynthesis.getVoices();
       if (!voices.length) return null;
 
       const exact = voices.find(v => v.lang && v.lang.toLowerCase() === langCode.toLowerCase());
       if (exact) return exact;
 
-      const samePrefix = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(langCode.split("-")[0].toLowerCase()));
-      if (samePrefix) return samePrefix;
-
-      return null;
+      const prefix = langCode.split("-")[0].toLowerCase();
+      return voices.find(v => v.lang && v.lang.toLowerCase().startsWith(prefix)) || null;
     }
 
     function getSpeechLanguage(language) {
@@ -287,17 +299,55 @@
     function speak(text, languageKey) {
       if (!text) return;
 
-      stopSpeaking();
+      stopAllPlayback();
 
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = getSpeechLanguage(languageKey);
-      utterance.rate = 0.9;
+      utterance.rate = 0.88;
       utterance.pitch = 1;
 
-      const voice = chooseVoice(text, utterance.lang);
+      const voice = chooseVoice(utterance.lang);
       if (voice) utterance.voice = voice;
 
       window.speechSynthesis.speak(utterance);
+    }
+
+    function playAudioFile(path, fallbackText, fallbackLanguage) {
+      stopAllPlayback();
+
+      const audio = new Audio(path);
+      activeAudio = audio;
+
+      audio.addEventListener("error", () => {
+        activeAudio = null;
+        speak(fallbackText, fallbackLanguage);
+      });
+
+      audio.addEventListener("ended", () => {
+        activeAudio = null;
+      });
+
+      audio.play().catch(() => {
+        activeAudio = null;
+        speak(fallbackText, fallbackLanguage);
+      });
+    }
+
+    function playItemText(item, mode, sourceLanguage, targetLanguage) {
+      if (mode === "source") {
+        if (item.audio && item.audio.source) {
+          playAudioFile(item.audio.source, item.sourceText, sourceLanguage);
+        } else {
+          speak(item.sourceText, sourceLanguage);
+        }
+        return;
+      }
+
+      if (item.audio && item.audio.target) {
+        playAudioFile(item.audio.target, item.targetText, targetLanguage);
+      } else {
+        speak(item.targetText, targetLanguage);
+      }
     }
 
     function getDataPath() {
@@ -322,6 +372,13 @@
       phraseList.appendChild(empty);
     }
 
+    function capitalize(value) {
+      if (!value) return "";
+      if (value === "isizulu") return "isiZulu";
+      if (value === "setswana") return "Setswana";
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    }
+
     function renderPhrases(data) {
       phraseList.innerHTML = "";
 
@@ -338,7 +395,7 @@
         top.className = "phrase-top";
 
         const leftWrap = document.createElement("div");
-        leftWrap.appendChild(createBadge(data.category || "general", "category-badge"));
+        leftWrap.appendChild(createBadge(item.category || data.category || "general", "category-badge"));
 
         const rightWrap = document.createElement("div");
         if (item.difficulty) {
@@ -369,12 +426,16 @@
 
         const sourceBtn = document.createElement("button");
         sourceBtn.textContent = `🔊 Hear ${capitalize(data.sourceLanguage)}`;
-        sourceBtn.addEventListener("click", () => speak(item.sourceText, data.sourceLanguage));
+        sourceBtn.addEventListener("click", () => {
+          playItemText(item, "source", data.sourceLanguage, data.targetLanguage);
+        });
 
         const targetBtn = document.createElement("button");
         targetBtn.className = "secondary";
         targetBtn.textContent = `🔊 Hear ${capitalize(data.targetLanguage)}`;
-        targetBtn.addEventListener("click", () => speak(item.targetText, data.targetLanguage));
+        targetBtn.addEventListener("click", () => {
+          playItemText(item, "target", data.sourceLanguage, data.targetLanguage);
+        });
 
         actions.appendChild(sourceBtn);
         actions.appendChild(targetBtn);
@@ -390,14 +451,9 @@
       });
     }
 
-    function capitalize(value) {
-      if (!value) return "";
-      if (value === "isizulu") return "isiZulu";
-      if (value === "setswana") return "Setswana";
-      return value.charAt(0).toUpperCase() + value.slice(1);
-    }
-
     async function loadPhrases() {
+      stopAllPlayback();
+
       const path = getDataPath();
       statusText.textContent = `Loading ${professionSelect.value} phrases: ${sourceLangSelect.value} → ${targetLangSelect.value}...`;
 
@@ -412,7 +468,7 @@
         renderPhrases(data);
 
         const count = Array.isArray(data.items) ? data.items.length : 0;
-        statusText.textContent = `Showing ${count} ${data.category || ""} phrase${count === 1 ? "" : "s"} for ${capitalize(data.sourceLanguage)} → ${capitalize(data.targetLanguage)}.`;
+        statusText.textContent = `Showing ${count} phrase${count === 1 ? "" : "s"} for ${capitalize(data.sourceLanguage)} → ${capitalize(data.targetLanguage)}.`;
       } catch (error) {
         console.error(error);
         renderEmpty("This lesson file is not available yet. Add the JSON file, then reload the page.");
@@ -424,9 +480,8 @@
     sourceLangSelect.addEventListener("change", loadPhrases);
     targetLangSelect.addEventListener("change", loadPhrases);
 
-    window.speechSynthesis.onvoiceschanged = () => {
-      // Makes voices available on some browsers before the user taps a phrase.
-    };
+    window.addEventListener("beforeunload", stopAllPlayback);
+    window.speechSynthesis.onvoiceschanged = () => {};
 
     loadPhrases();
   </script>
