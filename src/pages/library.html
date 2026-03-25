@@ -310,7 +310,7 @@
 
     <section class="panel">
       <h2 class="section-title">Choose your library</h2>
-      <p class="section-subtitle">Browse dialogues and practical scripts by profession, language and category.</p>
+      <p class="section-subtitle">Saved audio plays first. TTS is used only when audio is missing.</p>
 
       <div class="filters-grid">
         <div class="control-group">
@@ -389,9 +389,23 @@
 
     let libraryItems = [];
     let currentDialogue = null;
+    let activeAudio = null;
 
     function stopSpeaking() {
       window.speechSynthesis.cancel();
+    }
+
+    function stopAudio() {
+      if (activeAudio) {
+        activeAudio.pause();
+        activeAudio.currentTime = 0;
+        activeAudio = null;
+      }
+    }
+
+    function stopAllPlayback() {
+      stopSpeaking();
+      stopAudio();
     }
 
     function sleep(ms) {
@@ -416,18 +430,17 @@
       if (exact) return exact;
 
       const prefix = langCode.split("-")[0].toLowerCase();
-      const fallback = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(prefix));
-      return fallback || null;
+      return voices.find(v => v.lang && v.lang.toLowerCase().startsWith(prefix)) || null;
     }
 
     function speak(text, languageKey) {
       if (!text) return;
 
-      stopSpeaking();
+      stopAllPlayback();
 
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = getSpeechLanguage(languageKey);
-      utterance.rate = 0.9;
+      utterance.rate = 0.88;
       utterance.pitch = 1;
 
       const voice = chooseVoice(utterance.lang);
@@ -436,21 +449,42 @@
       window.speechSynthesis.speak(utterance);
     }
 
-    function speakQueued(text, languageKey) {
-      return new Promise(resolve => {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = getSpeechLanguage(languageKey);
-        utterance.rate = 0.9;
-        utterance.pitch = 1;
+    function playAudioFile(path, fallbackText, fallbackLanguage) {
+      stopAllPlayback();
 
-        const voice = chooseVoice(utterance.lang);
-        if (voice) utterance.voice = voice;
+      const audio = new Audio(path);
+      activeAudio = audio;
 
-        utterance.onend = () => resolve();
-        utterance.onerror = () => resolve();
-
-        window.speechSynthesis.speak(utterance);
+      audio.addEventListener("error", () => {
+        activeAudio = null;
+        speak(fallbackText, fallbackLanguage);
       });
+
+      audio.addEventListener("ended", () => {
+        activeAudio = null;
+      });
+
+      audio.play().catch(() => {
+        activeAudio = null;
+        speak(fallbackText, fallbackLanguage);
+      });
+    }
+
+    function playLine(line, mode, data) {
+      if (mode === "source") {
+        if (line.audio && line.audio.source) {
+          playAudioFile(line.audio.source, line.sourceText, data.sourceLanguage);
+        } else {
+          speak(line.sourceText, data.sourceLanguage);
+        }
+        return;
+      }
+
+      if (line.audio && line.audio.target) {
+        playAudioFile(line.audio.target, line.targetText, data.targetLanguage);
+      } else {
+        speak(line.targetText, data.targetLanguage);
+      }
     }
 
     function capitalize(value) {
@@ -554,7 +588,7 @@
             const response = await fetch(`../data/${professionSelect.value}/${item.file}`);
             const data = await response.json();
             if (data.lines && data.lines.length) {
-              speak(data.lines[0].targetText, data.targetLanguage);
+              playLine(data.lines[0], "target", data);
             }
           } catch (error) {
             console.error(error);
@@ -573,6 +607,8 @@
     }
 
     async function loadLibraryIndex() {
+      stopAllPlayback();
+
       const path = getLibraryIndexPath();
       statusText.textContent = `Loading library: ${sourceLangSelect.value} → ${targetLangSelect.value}...`;
 
@@ -604,6 +640,8 @@
     }
 
     async function openDialogue(fileName) {
+      stopAllPlayback();
+
       const profession = professionSelect.value;
       const path = `../data/${profession}/${fileName}`;
 
@@ -664,12 +702,12 @@
 
         const sourceBtn = document.createElement("button");
         sourceBtn.textContent = `🔊 ${capitalize(data.sourceLanguage)}`;
-        sourceBtn.addEventListener("click", () => speak(line.sourceText, data.sourceLanguage));
+        sourceBtn.addEventListener("click", () => playLine(line, "source", data));
 
         const targetBtn = document.createElement("button");
         targetBtn.className = "secondary";
         targetBtn.textContent = `🔊 ${capitalize(data.targetLanguage)}`;
-        targetBtn.addEventListener("click", () => speak(line.targetText, data.targetLanguage));
+        targetBtn.addEventListener("click", () => playLine(line, "target", data));
 
         actions.appendChild(sourceBtn);
         actions.appendChild(targetBtn);
@@ -688,10 +726,37 @@
     async function playCurrentDialogue() {
       if (!currentDialogue || !currentDialogue.lines || !currentDialogue.lines.length) return;
 
-      stopSpeaking();
+      stopAllPlayback();
 
       for (const line of currentDialogue.lines) {
-        await speakQueued(line.targetText, currentDialogue.targetLanguage);
+        if (line.audio && line.audio.target) {
+          await new Promise(resolve => {
+            stopAllPlayback();
+            const audio = new Audio(line.audio.target);
+            activeAudio = audio;
+
+            audio.onended = () => {
+              activeAudio = null;
+              resolve();
+            };
+
+            audio.onerror = () => {
+              activeAudio = null;
+              speak(line.targetText, currentDialogue.targetLanguage);
+              setTimeout(resolve, 1800);
+            };
+
+            audio.play().catch(() => {
+              activeAudio = null;
+              speak(line.targetText, currentDialogue.targetLanguage);
+              setTimeout(resolve, 1800);
+            });
+          });
+        } else {
+          speak(line.targetText, currentDialogue.targetLanguage);
+          await sleep(1900);
+        }
+
         await sleep(180);
       }
     }
@@ -704,11 +769,12 @@
     backToLibraryBtn.addEventListener("click", () => {
       viewerPanel.classList.remove("active");
       libraryListPanel.style.display = "block";
-      stopSpeaking();
+      stopAllPlayback();
     });
 
     playConversationBtn.addEventListener("click", playCurrentDialogue);
 
+    window.addEventListener("beforeunload", stopAllPlayback);
     window.speechSynthesis.onvoiceschanged = () => {};
 
     loadLibraryIndex();
