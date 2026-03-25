@@ -257,7 +257,7 @@
 
     <section class="panel">
       <h2 class="section-title">Choose your practice set</h2>
-      <p class="section-subtitle">Practise one phrase at a time. Listen, repeat, record, and play back your voice.</p>
+      <p class="section-subtitle">Saved audio plays first. TTS is used only if audio is missing.</p>
 
       <div class="controls-grid">
         <div class="control-group">
@@ -318,9 +318,27 @@
     let recordedAudioUrl = null;
     let lastAudio = null;
     let streamRef = null;
+    let activeAudio = null;
 
     function stopSpeaking() {
       window.speechSynthesis.cancel();
+    }
+
+    function stopAudio() {
+      if (activeAudio) {
+        activeAudio.pause();
+        activeAudio.currentTime = 0;
+        activeAudio = null;
+      }
+      if (lastAudio) {
+        lastAudio.pause();
+        lastAudio.currentTime = 0;
+      }
+    }
+
+    function stopAllPlayback() {
+      stopSpeaking();
+      stopAudio();
     }
 
     function getSpeechLanguage(language) {
@@ -347,17 +365,55 @@
     function speak(text, languageKey) {
       if (!text) return;
 
-      stopSpeaking();
+      stopAllPlayback();
 
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = getSpeechLanguage(languageKey);
-      utterance.rate = 0.9;
+      utterance.rate = 0.88;
       utterance.pitch = 1;
 
       const voice = chooseVoice(utterance.lang);
       if (voice) utterance.voice = voice;
 
       window.speechSynthesis.speak(utterance);
+    }
+
+    function playAudioFile(path, fallbackText, fallbackLanguage) {
+      stopAllPlayback();
+
+      const audio = new Audio(path);
+      activeAudio = audio;
+
+      audio.addEventListener("error", () => {
+        activeAudio = null;
+        speak(fallbackText, fallbackLanguage);
+      });
+
+      audio.addEventListener("ended", () => {
+        activeAudio = null;
+      });
+
+      audio.play().catch(() => {
+        activeAudio = null;
+        speak(fallbackText, fallbackLanguage);
+      });
+    }
+
+    function playItemText(item, mode, sourceLanguage, targetLanguage) {
+      if (mode === "source") {
+        if (item.audio && item.audio.source) {
+          playAudioFile(item.audio.source, item.sourceText, sourceLanguage);
+        } else {
+          speak(item.sourceText, sourceLanguage);
+        }
+        return;
+      }
+
+      if (item.audio && item.audio.target) {
+        playAudioFile(item.audio.target, item.targetText, targetLanguage);
+      } else {
+        speak(item.targetText, targetLanguage);
+      }
     }
 
     function capitalize(value) {
@@ -506,12 +562,12 @@
 
       const hearSourceBtn = document.createElement("button");
       hearSourceBtn.textContent = `🔊 Hear ${capitalize(sourceLangSelect.value)}`;
-      hearSourceBtn.addEventListener("click", () => speak(item.sourceText, sourceLangSelect.value));
+      hearSourceBtn.addEventListener("click", () => playItemText(item, "source", sourceLangSelect.value, targetLangSelect.value));
 
       const hearTargetBtn = document.createElement("button");
       hearTargetBtn.className = "secondary";
       hearTargetBtn.textContent = `🔊 Hear ${capitalize(targetLangSelect.value)}`;
-      hearTargetBtn.addEventListener("click", () => speak(item.targetText, targetLangSelect.value));
+      hearTargetBtn.addEventListener("click", () => playItemText(item, "target", sourceLangSelect.value, targetLangSelect.value));
 
       toolbar.appendChild(hearSourceBtn);
       toolbar.appendChild(hearTargetBtn);
@@ -560,7 +616,7 @@
       prevBtn.textContent = "← Previous";
       prevBtn.disabled = currentIndex === 0;
       prevBtn.addEventListener("click", () => {
-        stopSpeaking();
+        stopAllPlayback();
         clearRecording();
         cleanupStream();
         currentIndex -= 1;
@@ -572,7 +628,7 @@
       nextBtn.textContent = "Next →";
       nextBtn.disabled = currentIndex === practiceItems.length - 1;
       nextBtn.addEventListener("click", () => {
-        stopSpeaking();
+        stopAllPlayback();
         clearRecording();
         cleanupStream();
         currentIndex += 1;
@@ -657,8 +713,7 @@
 
       playMyVoiceBtn.addEventListener("click", () => {
         if (!recordedAudioUrl) return;
-        if (lastAudio) lastAudio.pause();
-
+        stopAllPlayback();
         lastAudio = new Audio(recordedAudioUrl);
         lastAudio.play();
       });
@@ -677,6 +732,8 @@
     }
 
     async function loadPracticeItems() {
+      stopAllPlayback();
+
       const path = getDataPath();
       statusText.textContent = `Loading practice phrases: ${sourceLangSelect.value} → ${targetLangSelect.value}...`;
 
@@ -706,35 +763,35 @@
     }
 
     categorySelect.addEventListener("change", () => {
-      stopSpeaking();
+      stopAllPlayback();
       clearRecording();
       cleanupStream();
       applyCategoryFilter();
     });
 
     professionSelect.addEventListener("change", () => {
-      stopSpeaking();
+      stopAllPlayback();
       clearRecording();
       cleanupStream();
       loadPracticeItems();
     });
 
     sourceLangSelect.addEventListener("change", () => {
-      stopSpeaking();
+      stopAllPlayback();
       clearRecording();
       cleanupStream();
       loadPracticeItems();
     });
 
     targetLangSelect.addEventListener("change", () => {
-      stopSpeaking();
+      stopAllPlayback();
       clearRecording();
       cleanupStream();
       loadPracticeItems();
     });
 
     window.addEventListener("beforeunload", () => {
-      stopSpeaking();
+      stopAllPlayback();
       clearRecording();
       cleanupStream();
     });
