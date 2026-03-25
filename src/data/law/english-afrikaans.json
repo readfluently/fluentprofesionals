@@ -6,59 +6,91 @@
   "items": [
     {
       "id": "law_001",
+      "category": "consultation",
       "sourceText": "Please tell me what happened",
-      "targetText": "Vertel my asseblief wat gebeur het",
+      "targetText": "Vertel my asseblief wat gebeur het.",
       "tone": "professional",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "audio": {
+        "target": "../audio/law/afrikaans/law_001.mp3"
+      }
     },
     {
       "id": "law_002",
+      "category": "consultation",
       "sourceText": "Start from the beginning",
-      "targetText": "Begin van die begin af",
+      "targetText": "Begin van die begin af.",
       "tone": "professional",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "audio": {
+        "target": "../audio/law/afrikaans/law_002.mp3"
+      }
     },
     {
       "id": "law_003",
+      "category": "consultation",
       "sourceText": "Speak slowly",
-      "targetText": "Praat stadig",
+      "targetText": "Praat stadig, asseblief.",
       "tone": "professional",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "audio": {
+        "target": "../audio/law/afrikaans/law_003.mp3"
+      }
     },
     {
       "id": "law_004",
+      "category": "consultation",
       "sourceText": "I understand",
-      "targetText": "Ek verstaan",
+      "targetText": "Ek verstaan.",
       "tone": "professional",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "audio": {
+        "target": "../audio/law/afrikaans/law_004.mp3"
+      }
     },
     {
       "id": "law_005",
+      "category": "consultation",
       "sourceText": "I need more information",
-      "targetText": "Ek het meer inligting nodig",
+      "targetText": "Ek het meer inligting nodig.",
       "tone": "professional",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "audio": {
+        "target": "../audio/law/afrikaans/law_005.mp3"
+      }
     },
     {
       "id": "law_006",
+      "category": "documents",
       "sourceText": "Please explain that again",
-      "targetText": "Verduidelik dit asseblief weer",
+      "targetText": "Verduidelik dit asseblief weer.",
       "tone": "professional",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "audio": {
+        "target": "../audio/law/afrikaans/law_006.mp3"
+      }
     },
     {
       "id": "law_007",
+      "category": "documents",
       "sourceText": "Do you have the document with you",
-      "targetText": "Het u die dokument by u",
+      "targetText": "Het u die dokument by u?",
       "tone": "professional",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "audio": {
+        "target": "../audio/law/afrikaans/law_007.mp3"
+      }
     },
     {
       "id": "law_008",
+      "category": "documents",
       "sourceText": "Please sign here",
-      "targetText": "Teken asseblief hier",
+      "targetText": "Teken asseblief hier.",
       "tone": "professional",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "audio": {
+        "target": "../audio/law/afrikaans/law_008.mp3"
+      }
     }
   ]
 }
